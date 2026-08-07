@@ -1,0 +1,36 @@
+title: "Ramon Ecung — AI, ML, and automation engineer with Python and UiPath experience"
+theme: "02-technical-terminal"
+tagline: "available for AI engineering roles"
+author: "ramon"
+base_url: "https://blog.ramonecung.com"
+
+# Which template renders "/":
+#   index        -> the blog home (hero + latest posts)
+#   coming-soon  -> a pre-launch splash (pair with robots.allow: false)
+home: "index"
+
+# Crawler policy -> robots.txt + sitemap.xml + a noindex meta when blocked.
+robots:
+  allow: true       # false blocks all crawlers (use during the coming-soon phase)
+  sitemap: true     # emit /sitemap.xml
+
+nav:
+  - label: "writing"
+    href: "/#writing"
+  - label: "about"
+    href: "/#about"
+  - label: "contact"
+    href: "/#contact"
+
+social:
+  github: "https://github.com/ramonecungcodes"
+  linkedin: "https://linkedin.com/in/ramonecung"
+  email: "success@ramonecung.com"
+
+about: |
+  Engineer focused on applied AI. I take fuzzy problems, build the smallest
+  thing that works, and write down what I learned so the next person moves
+  faster.
+
+  Currently deep in LLM systems, retrieval, and evaluation. This blog is my
+  thinking made public — and, if you're hiring, my résumé.

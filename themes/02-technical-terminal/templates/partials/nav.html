@@ -1,0 +1,10 @@
+<header class="site">
+  <nav class="nav">
+    <a class="brand" href="/"><span class="prompt">$ </span>{{ site.author or site.title }}<span class="cursor">_</span></a>
+    <div class="nav-links">
+      {% for item in site.nav %}
+      <a href="{{ item.href }}">{{ item.label }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+</header>

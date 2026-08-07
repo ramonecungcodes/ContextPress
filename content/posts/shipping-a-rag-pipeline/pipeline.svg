@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 120" role="img" aria-label="RAG pipeline: query, embed, vector search, rerank, generate">
+  <style>
+    .box { fill: none; stroke: #2ea043; stroke-width: 1.5; }
+    .lbl { fill: #8b949e; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 13px; }
+    .arr { stroke: #8b949e; stroke-width: 1.5; }
+  </style>
+  <!-- stages -->
+  <g>
+    <rect class="box" x="8"   y="42" width="96" height="36" rx="6"/>
+    <text class="lbl" x="56"  y="65" text-anchor="middle">query</text>
+
+    <rect class="box" x="160" y="42" width="96" height="36" rx="6"/>
+    <text class="lbl" x="208" y="65" text-anchor="middle">embed</text>
+
+    <rect class="box" x="312" y="42" width="112" height="36" rx="6"/>
+    <text class="lbl" x="368" y="65" text-anchor="middle">vector search</text>
+
+    <rect class="box" x="480" y="42" width="96" height="36" rx="6"/>
+    <text class="lbl" x="528" y="65" text-anchor="middle">rerank</text>
+
+    <rect class="box" x="632" y="42" width="80" height="36" rx="6"/>
+    <text class="lbl" x="672" y="65" text-anchor="middle">generate</text>
+  </g>
+  <!-- arrows -->
+  <g class="arr" fill="none">
+    <path d="M104 60 H160" marker-end="url(#a)"/>
+    <path d="M256 60 H312" marker-end="url(#a)"/>
+    <path d="M424 60 H480" marker-end="url(#a)"/>
+    <path d="M576 60 H632" marker-end="url(#a)"/>
+  </g>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8b949e"/>
+    </marker>
+  </defs>
+</svg>

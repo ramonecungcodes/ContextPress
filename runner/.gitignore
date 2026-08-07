@@ -1,0 +1,4 @@
+# Runner identity (the .runner file = this runner's credentials) — never commit.
+data/
+# The registration token / local env — never commit.
+.env

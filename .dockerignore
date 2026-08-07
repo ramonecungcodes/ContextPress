@@ -1,0 +1,12 @@
+.git
+.gitignore
+dist
+__pycache__
+*.pyc
+.venv
+venv
+.env
+.idea
+.vscode
+README.md
+CONTEXTPRESS-BRIEF.md

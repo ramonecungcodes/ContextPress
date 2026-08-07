@@ -1,0 +1,24 @@
+name: deploy
+# Push to main -> SSH into the server and run ./deploy.sh there.
+# Running the deploy on the host (not in this job's container) avoids the
+# docker-compose-from-container path problem entirely. See DEPLOY.md for the
+# one-time runner + secrets + authorized_keys setup.
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new \
+            "$DEPLOY_USER@$DEPLOY_HOST" 'cd /docker/ContextPress && ./deploy.sh'

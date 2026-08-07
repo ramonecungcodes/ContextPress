@@ -1,0 +1,10 @@
+# Normalize line endings to LF in the repo. These files run inside Linux
+# containers (nginx, shell), where CRLF can break parsing.
+* text=auto eol=lf
+
+# Explicitly binary (leave untouched)
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary

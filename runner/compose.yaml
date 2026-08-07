@@ -1,0 +1,26 @@
+# Declarative act_runner for ContextPress push-to-deploy.
+#
+# This runs on the DEPLOY server (not the Gitea host). On push to main, the
+# `deploy` workflow runs a job in a container here, which SSHes to this host
+# (172.17.0.1) and runs ./deploy.sh. See ../DEPLOY.md and ./README.md.
+#
+# First run needs a one-time registration token — put it in ./.env (see
+# .env.example). After registration the runner's identity lives in ./data and
+# the token is no longer used.
+services:
+  act_runner:
+    image: gitea/act_runner:0.2.11        # pinned; won't auto-upgrade
+    container_name: cloud-digitalocean-01-runner
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   # runner launches job containers
+      - ./data:/data                                 # runner identity (.runner) persists here
+    environment:
+      GITEA_INSTANCE_URL: "https://git.ramonecung.com"
+      # One-time token from Repo -> Settings -> Actions -> Runners -> Create new runner.
+      # Consumed only on the first `up`; ignored once ./data/.runner exists.
+      GITEA_RUNNER_REGISTRATION_TOKEN: "${GITEA_RUNNER_REGISTRATION_TOKEN:-}"
+      GITEA_RUNNER_NAME: "cloud-digitalocean-01-runner"
+      # The label -> image mapping. catthehacker images include an ssh client,
+      # which the deploy workflow needs.
+      GITEA_RUNNER_LABELS: "ubuntu-latest:docker://catthehacker/ubuntu:act-22.04"

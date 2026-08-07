@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="hero">
+    {% if site.tagline %}<div class="status"><span class="led"></span> {{ site.tagline }}</div>{% endif %}
+    <h1>Building <span class="hl">AI systems</span> that survive contact with production.</h1>
+    <p class="lead">I'm {{ site.author or "Joey" }} — an engineer working on LLM systems, retrieval, and evaluation. This is where I write down what I'm learning as I build.</p>
+    <div class="cta-row">
+      <a class="btn" href="#writing">$ cat ./writing</a>
+      <a class="btn ghost" href="#contact">$ ./contact.sh</a>
+    </div>
+  </section>
+
+  <section class="section" id="writing">
+    <div class="section-head"><h2>latest_posts</h2><span class="rule"></span></div>
+    {% for post in posts %}
+    <a class="post" href="{{ post.url }}">
+      <div class="meta">
+        {% for tag in post.tags %}<span class="tag">[{{ tag }}]</span>{% endfor %}
+        <span>{{ post.iso_date }}</span>
+        {% if post.reading_time %}<span>{{ post.reading_time }} min</span>{% endif %}
+      </div>
+      <h3>{{ post.title }}</h3>
+      {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+    </a>
+    {% else %}
+    <p style="color:var(--ink-soft)">No posts yet — check back soon.</p>
+    {% endfor %}
+  </section>
+
+  {% if site.about_html %}
+  <section class="section" id="about">
+    <div class="section-head"><h2>whoami</h2><span class="rule"></span></div>
+    <div class="term">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span>{{ (site.author or "joey")|lower }}@portfolio: ~/about</span>
+      </div>
+      <div class="term-body">
+        <div><span class="c">$</span> <span class="k">whoami</span> <span class="c">--long</span></div>
+        <div class="out">{{ site.about_html|safe }}</div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="section" id="contact">
+    <div class="section-head"><h2>get_in_touch</h2><span class="rule"></span></div>
+    <p style="color:var(--ink-soft); margin-top:0; font-size:15.5px;">Email's fastest. I read everything and reply to most.</p>
+    <div class="contact-links">
+      {% if site.social.email %}<a class="btn" href="mailto:{{ site.social.email }}">$ mail {{ site.author or "me" }}</a>{% endif %}
+      {% if site.social.github %}<a class="btn ghost" href="{{ site.social.github }}">github</a>{% endif %}
+      {% if site.social.linkedin %}<a class="btn ghost" href="{{ site.social.linkedin }}">linkedin</a>{% endif %}
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,7 @@
+Drafts live here. This folder is gitignored (except this file), so unfinished
+writing never lands in the public repo. Preview drafts locally with:
+
+    python build.py --drafts
+
+A draft is a normal post (flat .md or a bundle dir) placed in _drafts/.
+Move it up to content/posts/ when it's ready to publish.

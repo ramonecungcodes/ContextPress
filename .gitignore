@@ -1,0 +1,20 @@
+# build output
+dist/
+
+# drafts: unfinished writing stays local, never in the public repo.
+# The folder itself is kept (via .gitkeep); everything else is ignored.
+content/posts/_drafts/*
+!content/posts/_drafts/.gitkeep
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

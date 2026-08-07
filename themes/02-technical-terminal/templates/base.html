@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{% block title %}{{ site.title }}{% endblock %}</title>
+<meta name="description" content="{% block description %}{{ site.tagline }}{% endblock %}" />
+{% if not site.robots.allow %}<meta name="robots" content="noindex, nofollow" />
+{% endif %}
+{% block head_extra %}{% endblock %}
+<link rel="icon" href="{{ site.favicon or static_url('favicon.svg') }}" />
+<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="/feed.xml" />
+<link rel="stylesheet" href="{{ static_url('css/style.css') }}" />
+<link rel="stylesheet" href="{{ static_url('css/pygments.css') }}" />
+</head>
+<body>
+
+{% include "partials/nav.html" %}
+
+<main class="wrap">
+{% block content %}{% endblock %}
+</main>
+
+{% include "partials/footer.html" %}
+
+</body>
+</html>

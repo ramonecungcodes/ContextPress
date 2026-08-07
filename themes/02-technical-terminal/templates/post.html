@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — {{ site.title }}{% endblock %}
+{% block description %}{{ post.description or site.tagline }}{% endblock %}
+{% block head_extra %}
+<link rel="canonical" href="{{ site.base_url.rstrip('/') }}{{ post.url }}" />
+{% endblock %}
+
+{% block content %}
+  <article class="article">
+    <a class="back" href="/#writing">&larr; all writing</a>
+    <header class="article-head">
+      <div class="meta">
+        {% for tag in post.tags %}<span class="tag">[{{ tag }}]</span>{% endfor %}
+        <span>{{ post.iso_date }}</span>
+        {% if post.reading_time %}<span>{{ post.reading_time }} min</span>{% endif %}
+      </div>
+      <h1>{{ post.title }}</h1>
+      {% if post.description %}<p class="lead">{{ post.description }}</p>{% endif %}
+    </header>
+    <div class="prose">
+      {{ post.body_html|safe }}
+    </div>
+  </article>
+{% endblock %}
