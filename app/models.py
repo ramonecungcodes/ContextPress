@@ -27,6 +27,47 @@ class Robots(BaseModel):
     sitemap: bool = True        # emit /sitemap.xml and reference it from robots.txt
 
 
+class AIModels(BaseModel):
+    """A model per role. Fill in the ones your server actually serves."""
+    embeddings: str | None = None      # semantic search / RAG index
+    chat: str | None = None            # general chat / summarization
+    vision: str | None = None          # image understanding (alt text, OCR)
+    tools: str | None = None           # function/tool calling
+    rerank: str | None = None          # reorder search candidates
+    code: str | None = None            # code-specialized model
+    transcription: str | None = None   # speech-to-text
+    moderation: str | None = None      # safety / content classification
+
+
+class AIServer(BaseModel):
+    """A build-time AI server (e.g. LM Studio or an OpenAI-compatible API).
+
+    Used by build steps such as generating a semantic-search index. All values
+    support ${VAR-default} substitution resolved from the environment at load
+    time, so secrets live in a gitignored .env, never in the committed YAML.
+    """
+    enabled: bool = False
+    provider: str = "lmstudio"         # lmstudio | openai (OpenAI-compatible)
+    scheme: str = "http"               # http | https
+    host: str = "localhost"
+    port: int | None = None            # None => 443 for https, else 80
+    api_key: str | None = None         # keep in .env, not in ai.yaml
+    models: AIModels = Field(default_factory=AIModels)
+
+    @property
+    def effective_port(self) -> int:
+        if self.port is not None:
+            return self.port
+        return 443 if self.scheme == "https" else 80
+
+    @property
+    def base_url(self) -> str:
+        default = 443 if self.scheme == "https" else 80
+        port = self.effective_port
+        host = self.host if port == default else f"{self.host}:{port}"
+        return f"{self.scheme}://{host}"
+
+
 class SiteConfig(BaseModel):
     title: str
     theme: str = "02-technical-terminal"

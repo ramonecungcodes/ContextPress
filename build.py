@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import shutil
 from datetime import datetime, timezone
 from email.utils import format_datetime
@@ -21,14 +22,34 @@ from xml.sax.saxutils import escape
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.exceptions import TemplateNotFound
 
-from app.content import load_posts, load_site, pygments_css
+from app.content import load_ai, load_posts, load_site, pygments_css
 
 ROOT = Path(__file__).parent
 
 
+def _load_dotenv(path: Path) -> None:
+    """Load KEY=VALUE lines from .env into the environment (no override).
+
+    Lets `python build.py` pick up secrets locally the same way the Docker
+    `build` service does via env_file. Existing env vars always win.
+    """
+    if not path.is_file():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        if line.startswith("export "):
+            line = line[len("export "):]
+        key, _, val = line.partition("=")
+        os.environ.setdefault(key.strip(), val.strip().strip('"').strip("'"))
+
+
 def build(content_dir: Path, out_dir: Path, themes_dir: Path,
           *, drafts: bool = False) -> None:
+    _load_dotenv(ROOT / ".env")          # so ${VAR} in config resolves locally
     site = load_site(content_dir)
+    ai = load_ai(content_dir)            # validated; used by future build steps
 
     # A theme bundles its own templates + static assets under themes/<name>/.
     # The `theme` field in site.yaml selects which bundle to render with.
@@ -120,8 +141,10 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
     if site.robots.sitemap:
         (out_dir / "sitemap.xml").write_text(_sitemap(site, posts), encoding="utf-8")
 
+    ai_status = (f"{ai.provider} @ {ai.base_url}" if ai.enabled else "disabled")
     print(f"Built {len(posts)} post(s) -> {out_dir}  (home={site.home}, "
-          f"crawlers={'allowed' if site.robots.allow else 'blocked'})")
+          f"crawlers={'allowed' if site.robots.allow else 'blocked'}, "
+          f"ai={ai_status})")
 
 
 def _robots(site) -> str:

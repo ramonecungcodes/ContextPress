@@ -41,8 +41,10 @@ themes/                  # one bundle per theme (templates + assets together)
     static/css/style.css # this theme's stylesheet
 content/
   site.yaml              # title, theme, nav, social, about
+  ai.yaml                # optional build-time AI server (env-substituted)
   posts/*.md             # posts (Markdown + YAML frontmatter)
   posts/_drafts/         # unfinished posts — gitignored, local-only
+.env.example             # template for .env (secrets; .env is gitignored)
 Dockerfile               # builder image (python + deps) that renders the site
 docker-compose.yaml      # on-demand build service + always-on nginx
 nginx.conf               # nginx server config (bind-mounted into the container)
@@ -170,6 +172,62 @@ The icon is **theme-controlled**: drop `favicon.svg` (or `.ico`/`.png`) in the
 theme's `static/`, and `base.html` links it at `/static/favicon.svg`. Switching
 themes switches the icon automatically. Set `favicon:` in `site.yaml` only to
 override.
+
+## AI server (`content/ai.yaml`)
+
+An optional build-time AI server (LM Studio or any OpenAI-compatible API), for
+build steps like generating a semantic-search index. Configure it in
+[`content/ai.yaml`](content/ai.yaml):
+
+- `provider` — `lmstudio` or `openai` (OpenAI-compatible)
+- `scheme` / `host` / `port` — connection; blank `port` defaults to 443 (https)
+  or 80 (http)
+- `api_key` — **source from `.env`, never hard-code**
+- `models` — one per role: `embeddings`, `chat`, `vision`, `tools`, `rerank`,
+  `code`, `transcription`, `moderation`
+
+Every value supports **`${VAR-default}` / `${VAR:-default}` substitution**
+(Docker/shell style), resolved from the environment at build time. So the
+committed `ai.yaml` holds only placeholders; real values — and the API key —
+live in a gitignored `.env`:
+
+```yaml
+# content/ai.yaml (committed — no secrets)
+provider: "${AI_PROVIDER-lmstudio}"
+host: "${AI_HOST-localhost}"
+port: "${AI_PORT-}"
+api_key: "${AI_API_KEY-}"
+```
+
+```bash
+# .env (gitignored — real values)
+AI_PROVIDER=openai
+AI_API_KEY=sk-...
+```
+
+`build.py` loads `.env` automatically; the Docker `build` service reads it via
+`env_file`. Copy [`.env.example`](.env.example) to `.env` to start. Nothing from
+`ai.yaml` (including the key) is rendered into the site.
+
+## Secrets & committing
+
+The repo is public (it's your code showcase), and **git history is forever** —
+anything committed, even if deleted later, stays in history. So:
+
+- **Real secrets go in `.env`** (gitignored), referenced via `${VAR}` in config.
+  Never hard-code keys, tokens, or passwords in tracked files.
+- **Before every commit, review what you're staging for secrets:**
+  ```bash
+  git diff --cached          # read the actual staged changes
+  git status                 # confirm .env / key files are NOT staged
+  ```
+- **Never commit:** `.env`, API keys/tokens, private keys, passwords, the
+  runner registration token, or internal hostnames/IPs you don't want public.
+- Committed templates end in `.example` and contain **placeholders only**.
+
+If a secret does get committed, treat it as compromised: **rotate/revoke it**,
+then scrub history (`git filter-repo`) — deleting the file in a new commit is
+not enough.
 
 ## Build & run with Docker
 

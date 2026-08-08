@@ -1,0 +1,32 @@
+# Build-time AI server (optional).
+#
+# Used by build steps such as generating a semantic-search index. Values support
+# ${VAR-default} / ${VAR:-default} substitution resolved from the environment at
+# build time. Put real values — ESPECIALLY the API key — in a gitignored .env
+# file (see ../.env.example). Never commit secrets to this file.
+
+enabled: "${AI_ENABLED-false}"
+
+# API dialect the server speaks:
+#   lmstudio -> local LM Studio (OpenAI-compatible) server
+#   openai   -> OpenAI, or any OpenAI-compatible endpoint (Ollama, vLLM, ...)
+provider: "${AI_PROVIDER-lmstudio}"
+
+# Connection. Leave port blank to default to 443 (https) or 80 (http).
+scheme: "${AI_SCHEME-http}"
+host: "${AI_HOST-localhost}"
+port: "${AI_PORT-}"
+
+# Secret — source from .env, keep it out of this committed file.
+api_key: "${AI_API_KEY-}"
+
+# One model per role. Fill in the ones your server actually serves.
+models:
+  embeddings:    "${AI_MODEL_EMBEDDINGS-}"     # semantic search / RAG
+  chat:          "${AI_MODEL_CHAT-}"           # summaries, generation
+  vision:        "${AI_MODEL_VISION-}"         # image alt text / OCR
+  tools:         "${AI_MODEL_TOOLS-}"          # function / tool calling
+  rerank:        "${AI_MODEL_RERANK-}"         # reorder search candidates
+  code:          "${AI_MODEL_CODE-}"           # code-specialized model
+  transcription: "${AI_MODEL_TRANSCRIPTION-}"  # speech-to-text
+  moderation:    "${AI_MODEL_MODERATION-}"     # safety / classification

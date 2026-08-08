@@ -10,6 +10,7 @@ import and reuse this exact loader.
 """
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 
@@ -22,9 +23,50 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.util import ClassNotFound
 
-from .models import Post, SiteConfig
+from .models import AIServer, Post, SiteConfig
 
 WORDS_PER_MINUTE = 200
+
+# ${VAR}, ${VAR-default}, ${VAR:-default}  (Docker/shell-style)
+_ENV_RE = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)(:?-)?([^}]*)\}")
+
+
+def expand_env(text: str, environ: dict | None = None) -> str:
+    """Substitute ${VAR-default}/${VAR:-default}/${VAR} from the environment.
+
+    - ${VAR}            -> value, or empty if unset
+    - ${VAR-default}    -> default only if VAR is unset
+    - ${VAR:-default}   -> default if VAR is unset OR empty
+    Lets config files reference secrets kept in a gitignored .env instead of
+    committing them.
+    """
+    env = os.environ if environ is None else environ
+
+    def repl(m: re.Match) -> str:
+        name, op, default = m.group(1), m.group(2), m.group(3)
+        val = env.get(name)
+        if not op:                       # ${VAR}
+            return val if val is not None else ""
+        if op == ":-":                   # unset OR empty -> default
+            return val if val not in (None, "") else default
+        return val if val is not None else default   # "-": unset -> default
+
+    return _ENV_RE.sub(repl, text)
+
+
+def _nullify_empty(obj):
+    """Recursively turn "" into None so ${VAR-} falls back to model defaults."""
+    if isinstance(obj, dict):
+        return {k: _nullify_empty(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_nullify_empty(v) for v in obj]
+    return None if obj == "" else obj
+
+
+def _load_yaml(path: Path) -> dict:
+    """Read a YAML config with ${VAR} substitution applied first."""
+    raw = expand_env(path.read_text(encoding="utf-8"))
+    return _nullify_empty(yaml.safe_load(raw) or {})
 
 
 def _highlight(code: str, lang: str, _attrs: str) -> str:
@@ -81,10 +123,17 @@ def _reading_time(text: str) -> int:
 
 
 def load_site(content_dir: Path) -> SiteConfig:
-    raw = yaml.safe_load((content_dir / "site.yaml").read_text(encoding="utf-8")) or {}
-    site = SiteConfig(**raw)
+    site = SiteConfig(**_load_yaml(content_dir / "site.yaml"))
     site.about_html = render_markdown(site.about) if site.about else ""
     return site
+
+
+def load_ai(content_dir: Path) -> AIServer:
+    """Load content/ai.yaml (optional). Missing file -> a disabled default."""
+    path = content_dir / "ai.yaml"
+    if not path.exists():
+        return AIServer()
+    return AIServer(**_load_yaml(path))
 
 
 def _scan_posts(directory: Path):

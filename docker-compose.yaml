@@ -14,6 +14,9 @@ services:
     image: contextpress-builder:latest
     pull_policy: build           # build locally; never pull this from a registry
     working_dir: /src
+    env_file:                    # secrets for ${VAR} in content/ai.yaml
+      - path: .env
+        required: false          # fine to run without one
     volumes:
       - ./app:/src/app:ro
       - ./themes:/src/themes:ro
