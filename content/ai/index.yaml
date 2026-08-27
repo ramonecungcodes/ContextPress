@@ -1,0 +1,200 @@
+# /ai/ — the AI-engineer landing page, composed from widgets.
+# Each item under `sections:` names a widget template (themes/<theme>/
+# templates/widgets/<widget>.html); the rest of the item is that widget's data.
+title: "Ramon Eçung · AI Engineer"
+description: "AI Engineer who builds and operates production LLM, retrieval, and automation systems. 9+ years software engineering. Active Secret Clearance. Open to remote."
+og_image: "https://ramonecung.com/og/ai.png"
+brand: "ramon@ai-engineer: ~"
+
+nav:
+  - { label: "about", href: "#about" }
+  - { label: "work", href: "#work" }
+  - { label: "skills", href: "#skills" }
+  - { label: "experience", href: "#experience" }
+  - { label: "projects", href: "/projects/" }
+  - { label: "blog", href: "/blog/" }
+
+footer_links:
+  - { label: "success@ramonecung.com", href: "mailto:success@ramonecung.com" }
+  - { label: "github", href: "https://github.com/ramonecungcodes" }
+  - { label: "linkedin", href: "https://linkedin.com/in/ramonecung" }
+  - { label: "projects", href: "/projects/" }
+  - { label: "blog", href: "/blog/" }
+  - { label: "résumé", href: "/ramon-ecung-resume.html" }
+
+sections:
+  - widget: hero
+    name: "Ramon Eçung II"
+    role: "AI Engineer · Python & Applied AI Systems · UiPath RPA Developer"
+    lede: >-
+      I build and operate AI systems end to end: models, embeddings, and vector
+      search wired into real services, packaged as Docker Compose stacks and
+      shipped through CI. 9+ years of software engineering behind the
+      infrastructure that keeps them running.
+    badges:
+      - "9+ yrs software engineering"
+      - "Active Secret Clearance"
+      - "Open to remote"
+      - "Clearwater, FL"
+    primary: { label: "View my work ↓", href: "#work" }
+    resume:
+      - { label: "HTML", href: "/ramon-ecung-resume.html" }
+      - { label: "PDF", href: "/Ramon_Ecung_AI_Engineer_Resume.pdf" }
+      - { label: "Markdown", href: "/Ramon_Ecung_AI_Engineer_Resume.md" }
+    links:
+      - { label: "email", href: "mailto:success@ramonecung.com" }
+      - { label: "github", href: "https://github.com/ramonecungcodes" }
+      - { label: "linkedin", href: "https://linkedin.com/in/ramonecung" }
+    avatar: { src: "headshot.jpg", alt: "Ramon Eçung II" }
+
+  - widget: prose
+    id: about
+    prompt: "cat about.md"
+    paragraphs:
+      - >-
+        I'm an AI engineer with 9+ years across software, systems integration,
+        and automation in federal, local-government, and enterprise
+        environments. What I care about most is the part that comes after the
+        demo: taking LLMs, embeddings, and agents and turning them into systems
+        that actually run, and keep running, in production.
+      - >-
+        Day to day that means working with models and local inference (LM
+        Studio, Ollama, GGUF), designing retrieval (hybrid full-text + vector
+        search over pgvector and SQLite-Vec), exposing services to agents over
+        MCP, and packaging the whole thing as Docker Compose stacks I can deploy
+        and evolve through CI. Behind that sits Python, PostgreSQL, REST/FastAPI,
+        AWS, and Nginx/reverse-proxy plumbing.
+      - >-
+        I bring production habits even to personal projects: least-privilege
+        network boundaries, data provenance for embeddings, reversible
+        migrations, observable async work, and testing gates before deploy. I'd
+        rather ship something honest about its limits than a demo that hides
+        them.
+    readmore: { label: "read the full résumé →", href: "/ramon-ecung-resume.html" }
+
+  - widget: cards
+    id: work
+    prompt: "ls ~/work"
+    items:
+      - title: "Media Tube: private, self-hosted media platform"
+        sub: "Python · FastAPI · PostgreSQL/pgvector · Docker Compose · S3 · durable job workers"
+        feature: true
+        bullets:
+          - "Grew from three scripts into a containerized system with a service boundary, durable background workers (leases, heartbeats, retries), and object storage behind an authenticated API."
+          - "Semantic + full-text search with embeddings keyed by model provenance: a model switch never silently mixes incompatible vectors."
+          - "AI-assisted tagging, transcription workflows, and CPU face detection/grouping as an isolated stateless service."
+          - "Graduated testing: 133+ test modules, Ruff/Semgrep/ESLint security gates, a schema-aware SQL gate, and Playwright on Chromium and WebKit as a deploy gate."
+        tags: ["pgvector", "FastAPI", "Docker Compose", "Playwright", "least-privilege"]
+        links:
+          - { label: "Read the writeup", href: "/blog/media-tube-media-platform/" }
+          - { label: "Testing strategy", href: "/blog/media-tube-testing-strategy/" }
+          - { label: "Coverage report", href: "/projects/media-tube/reports/media-tube-test-coverage-report-2026-08-27/" }
+      - title: "Messages Archive: AI-native, private message archive"
+        sub: "Python · FastAPI · SQLite (FTS5 + Vec) · Ollama · MCP · Tailscale"
+        bullets:
+          - "Append-only archive that preserves message revision history: what did I observe and when, not just current state."
+          - "Local natural-language retrieval: Nomic embeddings + a read-only FastMCP tool surface, with a visible AI audit trail."
+          - "Model selection as a systems problem on a 32 GB CPU-only host: residency limits, serialized inference, queued work."
+        tags: ["embeddings", "FastMCP", "SQLite-Vec", "local LLM"]
+        links:
+          - { label: "Read the writeup", href: "/blog/messages-archive/" }
+      - title: "AI Search, Embeddings & Retrieval"
+        sub: "Semantic retrieval · hybrid indexing · LLM tool integration"
+        bullets:
+          - "Hybrid search combining PostgreSQL full-text, metadata filtering, and vector retrieval."
+          - "Benchmarked pgvector, SQLite-Vec, and relational storage on performance, indexing, and consistency."
+          - "Embedding lifecycle strategies for model changes, re-indexing, and versioning."
+          - "FastMCP servers exposing app services as structured tools for local LLM agents."
+        tags: ["Nomic", "hybrid search", "MCP"]
+      - title: "Local LLM & Agentic Dev Environment"
+        sub: "Evaluating models, coding agents & autonomous workflows"
+        bullets:
+          - "Deploy/evaluate LLMs on Apple Silicon (up to 64 GB unified) with LM Studio & GGUF."
+          - "Agent workflows separating spec/architecture from implementation, testing, and review."
+          - "Repo-level context files, isolated worktrees, testing gates, and phased commits for reliable autonomous coding."
+        tags: ["LM Studio", "GGUF", "Claude Code", "agents"]
+      - title: "ContextPress: this site's engine"
+        sub: "Static-site generator · Docker · build-time AI config"
+        bullets:
+          - "Python + Jinja2 + markdown generator with typed (Pydantic) config validation."
+          - "Theme & page bundles, content-hash cache-busting, RSS/sitemap/robots generation."
+          - "Bind-mounted output served by pinned Nginx; on-demand builder container, restart-free updates."
+        tags: ["Python", "Jinja2", "Docker", "Nginx"]
+        links:
+          - { label: "GitHub", href: "https://github.com/ramonecungcodes/ContextPress" }
+    note: "More project repositories are being published over the coming weeks. In the meantime, the write-ups below go deep on the architecture and engineering decisions."
+
+  - widget: writing
+    id: writing
+    prompt: "ls ~/writing"
+    note: "I write up the engineering behind my projects: architecture decisions, retrieval and embedding design, local LLM constraints, and testing strategy. I also publish live test-coverage reports and track the deltas between runs."
+    featured:
+      href: "/blog/document-intelligence-the-model-wasnt-the-hard-part/"
+      image: "https://ramonecung.com/og/document-intelligence-the-model-wasnt-the-hard-part.png"
+      alt: "I Built a Document Intelligence System. The Model Wasn't the Hard Part."
+      eyebrow: "Featured writeup · 33 min read"
+      title: "I Built a Document Intelligence System. The Model Wasn't the Hard Part."
+      excerpt: "Taking a local-LLM document-extraction system from 0.928 to 0.986 by fixing the system around the model, the schema, prompts, evaluation, and abstention, instead of reaching for a bigger model."
+    posts:
+      - { title: "From Three Scripts to a Private Media Platform", meta: "15 min", href: "/blog/media-tube-media-platform/" }
+      - { title: "From a Test Suite to a Testing Strategy", meta: "18 min", href: "/blog/media-tube-testing-strategy/" }
+      - { title: "Building a Private, AI-Native Messages Archive", meta: "10 min", href: "/blog/messages-archive/" }
+    cta: { label: "Visit the blog →", href: "/blog/" }
+
+  - widget: skills
+    id: skills
+    prompt: "cat skills.txt"
+    categories:
+      - heading: "AI & Generative AI"
+        body: "LLMs & local inference, agentic workflows, prompt & context engineering, semantic search, vector similarity, retrieval architectures, multimodal AI, transcription/translation, image & video classification."
+      - heading: "AI Infrastructure & Tooling"
+        body: "LM Studio, Ollama, GGUF, MLX, Whisper/whisper.cpp, Nomic embeddings, pgvector & SQLite-Vec, inference pipelines, Dockerized AI services, Nvidia GPU & Apple Silicon inference."
+      - heading: "Python & Backend"
+        body: "Python, FastMCP, FastAPI, Flask, REST APIs, service-layer architecture, SQL, PostgreSQL, SQL Server, background job systems, integration engineering, automated testing."
+      - heading: "Agents & AI-Assisted Engineering"
+        body: "Claude Code, Codex, CLAUDE.md/AGENTS.md workflows, hooks, tool-oriented agents, implementation planning, autonomous task decomposition, AI-assisted test generation & review."
+      - heading: "Cloud & DevOps"
+        body: "AWS (Lambda, ECS, Step Functions), Docker Compose, Git/GitLab/GitHub, Jenkins CI/CD, Nginx/reverse proxies, Linux, containerized services, production troubleshooting."
+      - heading: "Enterprise Automation"
+        body: "UiPath Studio & Orchestrator, REFramework, Document Understanding, attended/unattended automation, queues, assets, and orchestration."
+    readmore: { label: "full skills breakdown in résumé →", href: "/ramon-ecung-resume.html" }
+
+  - widget: timeline
+    id: experience
+    prompt: "cat experience.log"
+    items:
+      - role: "Senior RPA Consultant"
+        org: "OTOT (embedded, US Coast Guard FINCEN)"
+        date: "Oct 2024 – Present"
+        note: "Fully remote · sole RPA developer on a federal engagement"
+        bullets:
+          - "Own the full automation lifecycle for mission-critical federal systems: requirements, architecture, testing, UAT, deployment, monitoring, and production support."
+          - "Production automation for 12 legacy processes, integrating enterprise applications and cutting ~18 hrs/week of manual work per automation."
+          - "Document-understanding & data-extraction workflows, including work with UiPath's AI-powered Document Understanding for classification and extraction."
+          - "Design orchestration, queueing, retry, monitoring, and failure-recovery strategies for unattended production workloads within federal security requirements."
+      - role: "Automation Developer"
+        org: "Sarasota County Government"
+        date: "Dec 2023 – Oct 2024"
+        note: "CJIS verified · stood up the county's RPA practice"
+        bullets:
+          - "Built the county's RPA Center of Excellence from scratch as sole architect: standards, governance, reusable components, intake, and deployment practices."
+          - "Introduced Git-based development, PR reviews, Kanban, and automated testing to the automation program."
+          - "Integrated enterprise applications, APIs, databases, and document/data-processing workflows into maintainable systems."
+      - role: "Software Engineer II / Automation Developer"
+        org: "Cardinal Financial"
+        date: "Jul 2019 – Aug 2023"
+        note: "Fully remote · Python automation and a cloud-native data warehouse"
+        bullets:
+          - "Python & SQL automation for enterprise data workloads on AWS (Step Functions, ECS, Lambda, PostgreSQL)."
+          - "Backend integration services & REST APIs in Python/Flask connecting enterprise systems."
+          - "Analyzed Python and Pentaho ETL performance; refactored I/O-heavy tests and processes to speed the suite."
+          - "CI/CD with Jenkins & GitHub; cross-platform Docker dev environments (x86 & ARM64)."
+      - role: "Application Support / RPA Team Lead"
+        org: "UPC Insurance"
+        date: "Sep 2017 – Jul 2019"
+        bullets:
+          - "Launched an enterprise automation initiative from evaluation and infrastructure design through production deployment."
+          - "Built C# integration services and OCR/regex document-processing workflows for claims data."
+          - "Wrote PowerShell/VB.NET monitoring tools that detected failures and auto-generated alerts and tickets."
+    note: "Certs: UiPath Advanced RPA Developer · Python Institute PCAP & PCED · B.S. Information Sciences & Technology, Penn State (Dean's List, 3.92 GPA)"
+    readmore: { label: "full experience & detail in résumé →", href: "/ramon-ecung-resume.html" }
