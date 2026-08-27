@@ -54,7 +54,8 @@ else
 fi
 
 echo "==> Pruning old backups (keeping newest $KEEP)"
-ls -1dt dist-webroot-*/ 2>/dev/null | tail -n +"$((KEEP + 1))" | xargs -r rm -rf
+# `|| true`: with pipefail on, an unmatched glob (no backups yet) must not abort.
+ls -1dt dist-webroot-*/ 2>/dev/null | tail -n +"$((KEEP + 1))" | xargs -r rm -rf || true
 
 echo "==> Ensuring nginx is running"
 docker compose up -d web
