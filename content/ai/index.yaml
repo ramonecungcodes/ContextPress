@@ -15,15 +15,6 @@ nav:
   - { label: "blog", href: "/blog/" }
   - { label: "RPA version →", href: "/rpa/" }
 
-footer_links:
-  - { label: "success@ramonecung.com", href: "mailto:success@ramonecung.com" }
-  - { label: "github", href: "https://github.com/ramonecungcodes" }
-  - { label: "linkedin", href: "https://linkedin.com/in/ramonecung" }
-  - { label: "projects", href: "/projects/" }
-  - { label: "blog", href: "/blog/" }
-  - { label: "RPA version", href: "/rpa/" }
-  - { label: "résumé", href: "/ramon-ecung-resume.html" }
-
 sections:
   - widget: hero
     name: "Ramon Eçung II"

@@ -1,9 +1,6 @@
-<footer class="site">
-  <div class="wrap foot-row">
-    <span>&copy; {{ now_year }} {{ site.author or site.title }} &mdash; built with <a href="https://github.com/ramonecungcodes/ContextPress" target="_blank" rel="noopener">ContextPress</a></span>
-    <div>
-      <a href="/feed.xml">rss</a>
-      {% for item in site.nav %} &middot; <a href="{{ item.href }}">{{ item.label }}</a>{% endfor %}
-    </div>
-  </div>
+{# The one footer used on every page. Author comes from site.yaml; the year is
+   automatic. Styled by `.site-footer` in both stylesheets so it looks the same
+   on widget pages (widgets.css) and blog/post pages (style.css). #}
+<footer class="site-footer">
+  <div class="wrap">&copy; {{ now_year }} {{ site.author or site.title }} &middot; built with <a href="https://github.com/ramonecungcodes/ContextPress" target="_blank" rel="noopener">ContextPress</a></div>
 </footer>

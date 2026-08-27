@@ -15,10 +15,4 @@ nav:
   - { label: "RPA", href: "/rpa/" }
   - { label: "blog", href: "/blog/" }
 
-footer_links:
-  - { label: "success@ramonecung.com", href: "mailto:success@ramonecung.com" }
-  - { label: "github", href: "https://github.com/ramonecungcodes" }
-  - { label: "AI", href: "/ai/" }
-  - { label: "blog", href: "/blog/" }
-
 note: 'More projects are being written up. In the meantime, the <a href="/blog/">blog</a> goes deep on the engineering behind them.'

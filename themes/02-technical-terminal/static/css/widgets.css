@@ -231,5 +231,6 @@ a:hover { text-decoration: underline; }
 .postmini .pm-date { font-size: 12px; color: var(--muted); white-space: nowrap; }
 
 /* footer */
-footer.wrap { padding: 44px 0 60px; color: var(--muted); font-size: 13px; }
-footer .flinks { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 12px; }
+.site-footer { margin-top: 60px; border-top: 1px solid var(--border);
+  padding: 26px 0 60px; color: var(--muted); font-size: 13px; }
+.site-footer a { color: var(--accent); }

@@ -44,16 +44,7 @@
   {% block main %}{% endblock %}
 </main>
 
-<footer class="wrap">
-  {% if page.footer_links %}
-  <div class="flinks">
-    {% for item in page.footer_links %}
-    <a href="{{ item.href }}"{% if item.href.startswith('http') %} target="_blank" rel="noopener"{% endif %}>{{ item.label }}</a>
-    {% endfor %}
-  </div>
-  {% endif %}
-  <div>&copy; <span id="yr">{{ now_year }}</span> {{ site.author or site.title }} &middot; built with <a href="https://github.com/ramonecungcodes/ContextPress" target="_blank" rel="noopener">ContextPress</a></div>
-</footer>
+{% include "partials/footer.html" %}
 
 {% if page.theme_toggle %}
 <script>
