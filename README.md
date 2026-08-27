@@ -94,8 +94,11 @@ python build.py --dev              # relative links, for local preview
 python build.py --base-url https://staging.example.com   # any other target
 ```
 
-`--dev` is sugar for `--base-url ""`. Use it for the local `http.server`
-preview so internal links stay on localhost instead of jumping to production.
+`--dev` is sugar for `--base-url ""`. In relative builds internal links are
+rewritten **document-relative** to each page (`/static/x` becomes `../static/x`
+from `/ai/`), and the static cache-buster is dropped, so the raw `dist/` files
+open correctly straight from disk (`file://`, double-click) as well as under any
+subpath, not just a server root.
 
 ## Add a post
 

@@ -36,6 +36,7 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
     # which environment we build for is decided by the command, not the content.
     if base_url is not None:
         site.base_url = base_url
+    base = site.base_url.rstrip("/")   # "" => relative (document-relative) build
 
     # A theme bundles its own templates + static assets under themes/<name>/.
     # The `theme` field in site.yaml selects which bundle to render with.
@@ -80,7 +81,9 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
     # aggressively). Defined after assets are written so the hash is current.
     def static_url(rel: str) -> str:
         f = out_dir / "static" / rel
-        if not f.is_file():
+        if not f.is_file() or not base:
+            # No cache-buster in relative (dev/file://) builds: it's a
+            # production concern, and a query string can confuse file:// loads.
             return f"/static/{rel}"
         digest = hashlib.sha1(f.read_bytes()).hexdigest()[:8]
         return f"/static/{rel}?v={digest}"
@@ -92,11 +95,13 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
     # site.home).
     redirect_tmpl = env.get_template("redirect.html")
     page_tmpl = env.get_template("page.html")
-    base = site.base_url.rstrip("/")
 
     def emit(dest: Path, html: str) -> None:
-        """Write an HTML document, first qualifying its internal links."""
-        dest.write_text(absolutize_links(html, base), encoding="utf-8")
+        """Write an HTML document, first qualifying its internal links. `depth`
+        is how many directories below dist the page sits, so links can be made
+        document-relative when no base_url is set."""
+        depth = len(dest.relative_to(out_dir).parts) - 1
+        dest.write_text(qualify_links(html, base, depth), encoding="utf-8")
 
     routes = {p.route for p in pages}
     for page in pages:
@@ -172,33 +177,38 @@ def _route_to_index(route: str) -> Path:
     return Path(*parts, "index.html") if parts else Path("index.html")
 
 
-# href/src values that must NOT be prefixed with base_url: external URLs,
-# protocol-relative URLs, in-page fragments, and non-navigational schemes.
+# href/src values that must NOT be rewritten: external URLs, protocol-relative
+# URLs, in-page fragments, and non-navigational schemes.
 _LINK_SKIP = ("http://", "https://", "//", "#", "mailto:", "tel:", "sms:",
               "data:", "javascript:")
 _LINK_ATTR = re.compile(r'\b(href|src)="([^"]*)"')
 
 
-def absolutize_links(html: str, base_url: str) -> str:
-    """Prefix site-absolute links with base_url so internal links are fully
-    qualified. Rewrites only root-relative href/src values (those starting with
-    "/"): "/ai/" -> "https://host/ai/". External links (http/https), protocol-
-    relative "//", fragments "#...", and mailto:/tel:/data:/javascript: are left
-    untouched, as are page-relative links (no leading slash), which can't be
-    resolved without the page's own path. A no-op when base_url is empty.
+def qualify_links(html: str, base_url: str, depth: int) -> str:
+    """Rewrite site-absolute href/src values (those starting with "/") so
+    internal links resolve wherever the page is served from.
 
-    Code samples are safe: markdown renders their quotes as &quot;, so only real
-    attribute quotes (") match.
+    With a base_url set, links become fully qualified: "/ai/" -> "https://host/
+    ai/". With an empty base_url they become document-relative to the page's own
+    location using `depth` (how many directories deep the page is): from "/ai/"
+    (depth 1) "/static/x" -> "../static/x"; from the root (depth 0) -> "./static/
+    x". Document-relative output works under file:// and any subpath, not just a
+    server root.
+
+    External links (http/https), protocol-relative "//", fragments "#...", and
+    mailto:/tel:/data:/javascript: are left untouched, as are page-relative links
+    (no leading slash). Code samples are safe: markdown renders their quotes as
+    &quot;, so only real attribute quotes (") match.
     """
-    if not base_url:
-        return html
     base = base_url.rstrip("/")
+    rel_prefix = "../" * depth if depth else "./"
 
     def repl(m: re.Match) -> str:
         attr, val = m.group(1), m.group(2)
         if not val or not val.startswith("/") or val.startswith(_LINK_SKIP):
             return m.group(0)
-        return f'{attr}="{base}{val}"'
+        newval = f"{base}{val}" if base else rel_prefix + val[1:]
+        return f'{attr}="{newval}"'
 
     return _LINK_ATTR.sub(repl, html)
 
