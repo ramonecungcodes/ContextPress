@@ -81,6 +81,22 @@ python -m http.server -d dist 8000   # preview at http://localhost:8000
 Add `--drafts` to also build posts under `content/posts/_drafts/` (and any post
 marked `draft: true` in frontmatter).
 
+### Build target (base_url)
+
+`base_url` in `site.yaml` is the canonical **production** URL. A plain
+`python build.py` uses it and qualifies every internal link with it, so the
+default build is always deploy-ready. The build *command* picks a different
+target when you need one:
+
+```bash
+python build.py                    # prod (site.yaml base_url)
+python build.py --dev              # relative links, for local preview
+python build.py --base-url https://staging.example.com   # any other target
+```
+
+`--dev` is sugar for `--base-url ""`. Use it for the local `http.server`
+preview so internal links stay on localhost instead of jumping to production.
+
 ## Add a post
 
 A post is either a **flat file** or a **page bundle**:

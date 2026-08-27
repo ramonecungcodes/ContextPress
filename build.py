@@ -28,8 +28,14 @@ ROOT = Path(__file__).parent
 
 
 def build(content_dir: Path, out_dir: Path, themes_dir: Path,
-          *, drafts: bool = False) -> None:
+          *, drafts: bool = False, base_url: str | None = None) -> None:
     site = load_site(content_dir)
+
+    # base_url is the canonical production URL (site.yaml). A build-time override
+    # (e.g. `--dev` -> "", or `--base-url https://staging...`) wins over it, so
+    # which environment we build for is decided by the command, not the content.
+    if base_url is not None:
+        site.base_url = base_url
 
     # A theme bundles its own templates + static assets under themes/<name>/.
     # The `theme` field in site.yaml selects which bundle to render with.
@@ -155,7 +161,7 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
 
     home_desc = "redirect" if "/" in routes else site.home
     print(f"Built {len(posts)} post(s), {len(pages)} page(s) -> {out_dir}  "
-          f"(home={home_desc}, "
+          f"(home={home_desc}, base_url={site.base_url or 'relative'}, "
           f"crawlers={'allowed' if site.robots.allow else 'blocked'})")
 
 
@@ -264,6 +270,13 @@ def main() -> None:
     ap.add_argument("--out", default="dist", help="output directory (default: dist)")
     ap.add_argument("--content", default="content", help="content directory")
     ap.add_argument("--themes", default="themes", help="themes directory")
+    # base_url override: default is site.yaml's canonical (prod) URL. These pick
+    # the build target from the command instead. --dev is sugar for --base-url "".
+    url = ap.add_mutually_exclusive_group()
+    url.add_argument("--base-url", dest="base_url", default=None,
+                     help="override site.yaml base_url (e.g. a staging domain)")
+    url.add_argument("--dev", dest="base_url", action="store_const", const="",
+                     help='build with relative links (same as --base-url "")')
     args = ap.parse_args()
 
     build(
@@ -271,6 +284,7 @@ def main() -> None:
         out_dir=ROOT / args.out,
         themes_dir=ROOT / args.themes,
         drafts=args.drafts,
+        base_url=args.base_url,
     )
 
 
