@@ -166,3 +166,5 @@ container restart.
 | cron poll | none | ~2-min lag | `git fetch` + `deploy.sh` when `main` moves |
 
 All three ultimately run the same `deploy.sh`.
+
+# deploy trigger test dfcd488
