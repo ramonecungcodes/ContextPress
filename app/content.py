@@ -10,6 +10,7 @@ import and reuse this exact loader.
 """
 from __future__ import annotations
 
+import html
 import re
 from pathlib import Path
 
@@ -32,7 +33,13 @@ def _highlight(code: str, lang: str, _attrs: str) -> str:
 
     Returns a full <pre class="highlight"> block; markdown-it uses it verbatim
     when the return value already starts with `<pre`.
+
+    A ```mermaid fence is passed through as <pre class="mermaid"> (escaped, so
+    the diagram source survives as text) for mermaid.js to render in the
+    browser, rather than being syntax-highlighted as code.
     """
+    if lang == "mermaid":
+        return f'<pre class="mermaid">{html.escape(code)}</pre>'
     try:
         lexer = get_lexer_by_name(lang) if lang else guess_lexer(code)
     except ClassNotFound:
@@ -44,9 +51,12 @@ def _highlight(code: str, lang: str, _attrs: str) -> str:
 
 
 def _make_md() -> MarkdownIt:
+    # html=True: posts are the author's own trusted content, so raw HTML (and
+    # the figures expanded from @@FIG below) pass through instead of being
+    # escaped. This is a personal blog engine, not a renderer for untrusted input.
     md = MarkdownIt(
         "commonmark",
-        {"html": False, "linkify": True, "typographer": True, "highlight": _highlight},
+        {"html": True, "linkify": True, "typographer": True, "highlight": _highlight},
     )
     md.enable(["table", "strikethrough", "linkify"])
     # slug ids on h2/h3 so posts can be deep-linked
@@ -56,9 +66,25 @@ def _make_md() -> MarkdownIt:
 
 _MD = _make_md()
 
+# Figure directive: a line `@@FIG <file> | <caption>` becomes a captioned
+# <figure>. The image is bundle-relative (img/<file>), so it resolves under the
+# post's own URL. Kept out of Markdown proper so captions stay first-class.
+_FIG_RE = re.compile(r'^@@FIG[ \t]+(\S+)[ \t]*\|[ \t]*(.*)$', re.M)
+
+
+def _expand_figures(text: str) -> str:
+    def repl(m: re.Match) -> str:
+        src, caption = m.group(1), m.group(2).strip()
+        return (
+            f'<figure class="post-figure">'
+            f'<img src="img/{src}" alt="{html.escape(caption, quote=True)}" loading="lazy" />'
+            f'<figcaption>{html.escape(caption)}</figcaption></figure>'
+        )
+    return _FIG_RE.sub(repl, text)
+
 
 def render_markdown(text: str) -> str:
-    return _MD.render(text)
+    return _MD.render(_expand_figures(text))
 
 
 def pygments_css() -> str:
@@ -173,6 +199,11 @@ def load_posts(content_dir: Path, *, include_drafts: bool = False) -> list[Post]
         fm = frontmatter.load(path)
         meta = dict(fm.metadata)
         meta.setdefault("slug", slug)
+        # A page bundle (<dir>/index.md) carries its own assets; record the dir
+        # so the build copies them, even when the frontmatter slug differs from
+        # the folder name.
+        if path.name == "index.md":
+            meta["bundle"] = str(path.parent)
         if meta.get("reading_time") is None:
             meta["reading_time"] = _reading_time(fm.content)
         meta["body_html"] = render_markdown(fm.content)

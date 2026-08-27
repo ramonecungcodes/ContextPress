@@ -99,6 +99,7 @@ class Post(BaseModel):
     featured: bool = False            # highlight this post in the blog listing
     image: str = ""                   # optional cover image (bundle-relative or absolute)
     image_side: Literal["left", "right"] = "left"  # which side the cover sits on
+    bundle: str = ""                  # source bundle dir (set by loader; empty for flat posts)
     body_html: str = ""               # rendered HTML (never the raw markdown)
 
     @property
@@ -107,7 +108,7 @@ class Post(BaseModel):
 
     @property
     def url(self) -> str:
-        return f"/posts/{self.slug}/"
+        return f"/blog/{self.slug}/"
 
     @property
     def image_url(self) -> str:

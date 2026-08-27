@@ -148,22 +148,24 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
             )
         emit(out_dir / "index.html", home_tmpl.render(site=site, posts=posts))
 
-    # posts
+    # posts, served at /blog/<slug>/ (slug from frontmatter, may differ from the
+    # source folder name)
     post_tmpl = env.get_template("post.html")
     for post in posts:
-        post_dir = out_dir / "posts" / post.slug
+        post_dir = out_dir / "blog" / post.slug
         post_dir.mkdir(parents=True, exist_ok=True)
 
-        # Page bundle: copy assets that live beside the post's index.md
-        # (images, downloads) so relative links in the markdown resolve.
-        # A post is a bundle if posts/<slug>/ exists (or posts/_drafts/<slug>/
-        # for a draft being previewed with --drafts).
-        src_bundle = content_dir / "posts" / post.slug
-        if not src_bundle.is_dir():
-            src_bundle = content_dir / "posts" / "_drafts" / post.slug
-        if src_bundle.is_dir():
+        # Page bundle: copy assets that live beside the post's index.md (images
+        # in img/, downloads) so relative links in the markdown resolve.
+        # post.bundle is the source dir (set by the loader; empty for flat posts).
+        if post.bundle:
+            src_bundle = Path(post.bundle)
             for asset in src_bundle.iterdir():
-                if asset.is_file() and asset.name != "index.md":
+                if asset.name == "index.md":
+                    continue
+                if asset.is_dir():
+                    shutil.copytree(asset, post_dir / asset.name, dirs_exist_ok=True)
+                elif asset.is_file():
                     shutil.copy2(asset, post_dir / asset.name)
 
         emit(post_dir / "index.html", post_tmpl.render(site=site, post=post))
