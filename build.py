@@ -111,19 +111,24 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
     for page in pages:
         dest = out_dir / _route_to_index(page.route)
         dest.parent.mkdir(parents=True, exist_ok=True)
+
+        # Page bundle: copy sibling files (images, downloads) into the page's
+        # output dir so its links resolve. Runs for every page kind, so a root
+        # asset like content/headshot.jpg ships to dist/headshot.jpg (beside the
+        # root redirect). Config files and subdirectories (which are other
+        # routes) are skipped.
+        src_bundle = content_dir / _route_to_index(page.route).parent
+        if src_bundle.is_dir():
+            for asset in src_bundle.iterdir():
+                if asset.is_file() and asset.name not in ("index.yaml", "site.yaml"):
+                    shutil.copy2(asset, dest.parent / asset.name)
+
         if page.kind == "redirect":
             target = page.redirect
             canonical = base + target if base and target.startswith("/") else target
             emit(dest, redirect_tmpl.render(site=site, page=page, target=target,
                                             canonical=canonical))
         else:  # content page
-            # Page bundle: copy any assets that live beside index.yaml (images,
-            # downloads) so relative links in the page resolve.
-            src_bundle = content_dir / _route_to_index(page.route).parent
-            if src_bundle.is_dir():
-                for asset in src_bundle.iterdir():
-                    if asset.is_file() and asset.name != "index.yaml":
-                        shutil.copy2(asset, dest.parent / asset.name)
             canonical = base + page.route if base else page.route
             emit(dest, page_tmpl.render(site=site, page=page, posts=posts,
                                         canonical=canonical))
