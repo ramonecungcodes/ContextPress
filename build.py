@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import re
 import shutil
 from datetime import datetime, timezone
 from email.utils import format_datetime
@@ -86,6 +87,11 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
     redirect_tmpl = env.get_template("redirect.html")
     page_tmpl = env.get_template("page.html")
     base = site.base_url.rstrip("/")
+
+    def emit(dest: Path, html: str) -> None:
+        """Write an HTML document, first qualifying its internal links."""
+        dest.write_text(absolutize_links(html, base), encoding="utf-8")
+
     routes = {p.route for p in pages}
     for page in pages:
         dest = out_dir / _route_to_index(page.route)
@@ -93,11 +99,8 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
         if page.kind == "redirect":
             target = page.redirect
             canonical = base + target if base and target.startswith("/") else target
-            dest.write_text(
-                redirect_tmpl.render(site=site, page=page, target=target,
-                                     canonical=canonical),
-                encoding="utf-8",
-            )
+            emit(dest, redirect_tmpl.render(site=site, page=page, target=target,
+                                            canonical=canonical))
         else:  # content page
             # Page bundle: copy any assets that live beside index.yaml (images,
             # downloads) so relative links in the page resolve.
@@ -107,11 +110,8 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
                     if asset.is_file() and asset.name != "index.yaml":
                         shutil.copy2(asset, dest.parent / asset.name)
             canonical = base + page.route if base else page.route
-            dest.write_text(
-                page_tmpl.render(site=site, page=page, posts=posts,
-                                 canonical=canonical),
-                encoding="utf-8",
-            )
+            emit(dest, page_tmpl.render(site=site, page=page, posts=posts,
+                                        canonical=canonical))
 
     # home page ("/"): the template named by site.home ("index" or "coming-soon"),
     # unless a redirect page already claimed "/".
@@ -123,9 +123,7 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
                 f"home '{site.home}' has no template: expected "
                 f"{templates_dir / (site.home + '.html')}"
             )
-        (out_dir / "index.html").write_text(
-            home_tmpl.render(site=site, posts=posts), encoding="utf-8"
-        )
+        emit(out_dir / "index.html", home_tmpl.render(site=site, posts=posts))
 
     # posts
     post_tmpl = env.get_template("post.html")
@@ -145,8 +143,7 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
                 if asset.is_file() and asset.name != "index.md":
                     shutil.copy2(asset, post_dir / asset.name)
 
-        html = post_tmpl.render(site=site, post=post)
-        (post_dir / "index.html").write_text(html, encoding="utf-8")
+        emit(post_dir / "index.html", post_tmpl.render(site=site, post=post))
 
     # RSS
     (out_dir / "feed.xml").write_text(_rss(site, posts), encoding="utf-8")
@@ -167,6 +164,37 @@ def _route_to_index(route: str) -> Path:
     "/ai/" -> ai/index.html."""
     parts = [p for p in route.strip("/").split("/") if p]
     return Path(*parts, "index.html") if parts else Path("index.html")
+
+
+# href/src values that must NOT be prefixed with base_url: external URLs,
+# protocol-relative URLs, in-page fragments, and non-navigational schemes.
+_LINK_SKIP = ("http://", "https://", "//", "#", "mailto:", "tel:", "sms:",
+              "data:", "javascript:")
+_LINK_ATTR = re.compile(r'\b(href|src)="([^"]*)"')
+
+
+def absolutize_links(html: str, base_url: str) -> str:
+    """Prefix site-absolute links with base_url so internal links are fully
+    qualified. Rewrites only root-relative href/src values (those starting with
+    "/"): "/ai/" -> "https://host/ai/". External links (http/https), protocol-
+    relative "//", fragments "#...", and mailto:/tel:/data:/javascript: are left
+    untouched, as are page-relative links (no leading slash), which can't be
+    resolved without the page's own path. A no-op when base_url is empty.
+
+    Code samples are safe: markdown renders their quotes as &quot;, so only real
+    attribute quotes (") match.
+    """
+    if not base_url:
+        return html
+    base = base_url.rstrip("/")
+
+    def repl(m: re.Match) -> str:
+        attr, val = m.group(1), m.group(2)
+        if not val or not val.startswith("/") or val.startswith(_LINK_SKIP):
+            return m.group(0)
+        return f'{attr}="{base}{val}"'
+
+    return _LINK_ATTR.sub(repl, html)
 
 
 def _robots(site) -> str:
