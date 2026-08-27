@@ -1,9 +1,9 @@
 ---
 date: 2026-08-27
-description: A serious vulnerability in WordPress Core pushed me off WordPress, so I
+description: A critical vulnerability in WordPress Core pushed me off WordPress, so I
   replaced it with ContextPress — a small Python static site generator where the whole
   site is Markdown, YAML, templates, and a build step, and merging to main deploys it.
-image: img/hero.svg
+image: img/wordpress-security-tax-hero.png
 image_side: right
 slug: i-stopped-paying-the-wordpress-security-tax
 tags:
@@ -16,11 +16,11 @@ tags:
 title: I Stopped Paying the WordPress Security Tax
 ---
 
-# I Stopped Paying the WordPress Security Tax
+# WordPress Pushed Me Into Building My Own Site Generator
 
-_A serious vulnerability in WordPress Core gave me the push. Wanting a fun project was probably the real reason. What came out of it was ContextPress, a small Python static site generator where the entire site is Markdown, YAML, templates, and a build step. Merge to `main` and it deploys._
+_A serious vulnerability in WordPress Core was the final nudge, but the truth is I also wanted an excuse to build something interesting. That became ContextPress, a small Python static site generator built around Markdown, YAML, templates, and a simple build pipeline. Merge into main, and the new version publishes itself._
 
-@@FIG hero.svg | The trade I was actually making: a permanently-executing, internet-facing application versus a folder of pre-generated files. Replacing WordPress with a static site removes the attack surface instead of patching it.
+@@FIG wordpress-security-tax-hero.png | The trade I was actually making: babysitting a tangled, always-running application on one side, and a quiet stack of pre-generated files on the other. Replacing WordPress with a static site removes the attack surface instead of patching it.
 
 I ran this site on WordPress for a long time and, honestly, it worked fine. I wasn't one of those people who hated WordPress or thought it was bad software. It did what I needed it to do.
 
@@ -58,6 +58,8 @@ A static site can just be HTML and CSS generated ahead of time and served by ngi
 
 You cannot SQL inject a folder.
 
+@@FIG hero.svg | The same website, two architectures. The dynamic stack keeps PHP, a database, an admin login, and plugins executing on every request; the static version is pre-built files that nginx just hands out. Removing the runtime removes the attack surface instead of patching it.
+
 Of course, something still has to turn my Markdown into that folder. That became ContextPress.
 
 ## How ContextPress works
@@ -84,6 +86,11 @@ Walking through it from left to right:
 * [markdown-it-py](https://github.com/executablebooks/markdown-it-py) and [Pygments](https://pygments.org/) handle Markdown rendering and syntax highlighting.
 * [Jinja2](https://jinja.palletsprojects.com/) handles presentation. Templates live inside self-contained theme bundles, so the content and the site's visual presentation are separate. Changing the `theme:` value in `site.yaml` can re-skin the whole site without changing the content.
 * `dist/` is the finished product. Static HTML, CSS, RSS, and the other generated files all end up there. That directory is what eventually gets published.
+
+<figure class="post-figure fig-right">
+  <img src="img/build-pipeline.png" alt="Papercraft illustration: loose notes and Markdown pour into a Python machine that renders and validates them, pass a green check gate, and come out as a neat stack of finished pages." loading="lazy" />
+  <figcaption>Content in, a validated build, a finished site out — the generator does the work once, ahead of time.</figcaption>
+</figure>
 
 The important part of the architecture is where the complicated work happens.
 
@@ -164,6 +171,11 @@ The deployment process is basically:
 5. Prune old archives.
 
 nginx serves the webroot directly, so there is no application container to restart and no deployment process that takes the site offline while the new version starts up. Once the generated files are promoted, nginx starts serving them.
+
+<figure class="post-figure fig-left">
+  <img src="img/deploy-flow.png" alt="Isometric assembly line: a source document moves through a validation check, a build stage, and a locked, key-guarded deploy gate, ending as a live site in a browser window." loading="lazy" />
+  <figcaption>Merge to main and the change moves down the line on its own: build, safety checks, a locked-down deploy, live.</figcaption>
+</figure>
 
 There are a couple of details here that I think matter.
 
