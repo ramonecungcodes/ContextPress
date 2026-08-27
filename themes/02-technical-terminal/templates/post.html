@@ -5,11 +5,14 @@
 {% block head_extra %}
 <link rel="canonical" href="{{ site.base_url.rstrip('/') }}{{ post.url }}" />
 {% if '"mermaid"' in post.body_html %}
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-  var attr = document.documentElement.getAttribute('data-theme');
-  var dark = attr ? attr === 'dark' : !(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
-  mermaid.initialize({ startOnLoad: true, theme: dark ? 'dark' : 'default', securityLevel: 'strict' });
+<script defer src="{{ static_url('js/mermaid.min.js') }}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var attr = document.documentElement.getAttribute('data-theme');
+    var dark = attr ? attr === 'dark' : !(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
+    mermaid.initialize({ startOnLoad: false, theme: dark ? 'dark' : 'default', securityLevel: 'strict' });
+    mermaid.run();
+  });
 </script>
 {% endif %}
 {% endblock %}
