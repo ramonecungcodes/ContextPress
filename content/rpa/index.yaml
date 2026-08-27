@@ -74,6 +74,13 @@ sections:
         combination is rare on RPA teams, and it's the work I want to be doing.
     readmore: { label: "read the full résumé →", href: "/ramon-ecung-rpa-resume.html" }
 
+  - widget: contributions
+    id: activity
+    prompt: "git log --graph"
+    username: ramonecungcodes
+    href: "https://github.com/ramonecungcodes"
+    caption: "A year of public commits on GitHub. Most of my work also lives in private and self-hosted repos."
+
   - widget: timeline
     id: experience
     prompt: "cat experience.log"
