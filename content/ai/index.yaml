@@ -45,7 +45,7 @@ sections:
       - { label: "email", href: "mailto:success@ramonecung.com" }
       - { label: "github", href: "https://github.com/ramonecungcodes" }
       - { label: "linkedin", href: "https://linkedin.com/in/ramonecung" }
-    avatar: { src: "headshot.jpg", alt: "Ramon Eçung II" }
+    avatar: { src: "/headshot.jpg", alt: "Ramon Eçung II" }
 
   - widget: prose
     id: about
