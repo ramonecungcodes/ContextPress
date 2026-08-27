@@ -4,7 +4,7 @@
 list: projects
 title: "Projects · Ramon Eçung"
 description: "Systems Ramon Eçung builds and operates, documented with architecture, engineering decisions, and measurements."
-og_image: "https://ramonecung.com/og/ai.png"
+og_image: "/og/ai.png"
 brand: "ramon@ai-engineer: ~/projects"
 prompt: "ls ~/projects"
 heading: "Projects"

@@ -3,7 +3,7 @@
 # templates/widgets/<widget>.html); the rest of the item is that widget's data.
 title: "Ramon Eçung · AI Engineer"
 description: "AI Engineer who builds and operates production LLM, retrieval, and automation systems. 9+ years software engineering. Active Secret Clearance. Open to remote."
-og_image: "https://ramonecung.com/og/ai.png"
+og_image: "/og/ai.png"
 brand: "ramon@ai-engineer: ~"
 
 nav:
@@ -140,7 +140,7 @@ sections:
     note: "I write up the engineering behind my projects: architecture decisions, retrieval and embedding design, local LLM constraints, and testing strategy. I also publish live test-coverage reports and track the deltas between runs."
     featured:
       href: "/blog/document-intelligence-the-model-wasnt-the-hard-part/"
-      image: "https://ramonecung.com/og/document-intelligence-the-model-wasnt-the-hard-part.png"
+      image: "/og/document-intelligence-the-model-wasnt-the-hard-part.png"
       alt: "I Built a Document Intelligence System. The Model Wasn't the Hard Part."
       eyebrow: "Featured writeup · 33 min read"
       title: "I Built a Document Intelligence System. The Model Wasn't the Hard Part."

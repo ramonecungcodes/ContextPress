@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ramon Eçung II · Senior UiPath RPA Developer — Résumé</title>
+<meta name="description" content="Résumé — Ramon Eçung II, Senior UiPath RPA Developer with 9+ years across federal, government, and enterprise environments.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="/static/favicon/favicon.ico" sizes="any">
+<link rel="icon" href="/static/favicon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/favicon/apple-touch-icon.png">
+<style>
+:root {
+  --bg: oklch(0.97 0.005 90); --panel: oklch(1 0 0); --panel2: oklch(0.95 0.005 90);
+  --border: oklch(0.85 0.01 90); --text: oklch(0.25 0.01 255); --muted: oklch(0.5 0.01 90);
+  --accent: oklch(0.5 0.14 175); --accent-soft: oklch(0.5 0.14 175 / 0.12);
+}
+:root[data-theme="dark"] {
+  --bg: oklch(0.15 0.012 255); --panel: oklch(0.17 0.012 255); --panel2: oklch(0.2 0.012 255);
+  --border: oklch(0.32 0.012 255 / 0.6); --text: oklch(0.88 0.01 90); --muted: oklch(0.62 0.02 90);
+  --accent: oklch(0.82 0.14 175); --accent-soft: oklch(0.82 0.14 175 / 0.14);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace; background: var(--bg); color: var(--text);
+  line-height: 1.55; -webkit-font-smoothing: antialiased; transition: background .3s, color .3s; }
+::selection { background: var(--accent-soft); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.bar { position: sticky; top: 0; z-index: 20; display: flex; gap: 14px; align-items: center;
+  background: color-mix(in oklch, var(--bg) 88%, transparent); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border); padding: 10px 24px; font-size: 13px; }
+.bar a { color: var(--muted); } .bar a:hover { color: var(--accent); }
+.bar .sp { margin-left: auto; }
+.toggle, .printbtn { background: var(--panel2); border: 1px solid var(--border); color: var(--muted);
+  font: inherit; font-size: 12px; cursor: pointer; padding: 5px 10px; border-radius: 6px; }
+.toggle:hover, .printbtn:hover { color: var(--accent); border-color: var(--accent); }
+.sheet { max-width: 860px; margin: 0 auto; padding: 40px 24px 72px; }
+h1 { font-size: 30px; letter-spacing: -0.5px; }
+.title { color: var(--accent); font-size: 14px; font-weight: 600; margin-top: 6px; }
+.contact { color: var(--muted); font-size: 12.5px; margin-top: 10px; line-height: 1.9; }
+.contact a { color: var(--muted); } .contact a:hover { color: var(--accent); }
+h2 { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--accent);
+  margin: 30px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+p.summary { font-size: 14px; max-width: 760px; }
+.skillrow { margin-bottom: 10px; font-size: 13px; }
+.skillrow b { color: var(--text); }
+.skillrow span { color: var(--muted); }
+.role { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline; margin-top: 16px; }
+.role .who { font-size: 15px; font-weight: 600; }
+.role .who span { color: var(--accent); }
+.role .date { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.note { font-size: 12.5px; color: var(--muted); font-style: italic; margin: 2px 0 8px; }
+ul { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+li { font-size: 13px; padding-left: 16px; position: relative; }
+li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); }
+.edu { font-size: 13px; color: var(--text); }
+.edu b { color: var(--text); }
+footer { max-width: 860px; margin: 0 auto; padding: 0 24px 60px; color: var(--muted); font-size: 12px; }
+@media print {
+  :root { --bg:#fff; --panel:#fff; --panel2:#f4f4f4; --border:#ccc; --text:#111; --muted:#444; --accent:#0a6b5f; --accent-soft:#e6f4f1; }
+  .bar { display: none; } .sheet { padding: 0; max-width: none; } body { line-height: 1.4; }
+  h2 { margin-top: 18px; } a { color: #111; }
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <a href="/rpa/">← back to site</a>
+  <a href="/Ramon_Ecung_RPA_Developer_Resume.pdf">PDF version</a>
+  <span class="sp"></span>
+  <button class="printbtn" onclick="window.print()">print / save PDF</button>
+  <button class="toggle" id="themeToggle">theme: dark</button>
+</div>
+
+<main class="sheet">
+  <header>
+    <h1>Ramon Eçung II</h1>
+    <div class="title">Senior UiPath RPA Developer · 9+ years experience · UiPath Certified Developer · Active Secret Clearance</div>
+    <div class="contact">
+      Clearwater, FL · Open to Remote Work · <a href="mailto:success@ramonecung.com">success@ramonecung.com</a><br>
+      <a href="https://linkedin.com/in/ramonecung" target="_blank" rel="noopener">linkedin.com/in/ramonecung</a> · <a href="https://github.com/ramonecungcodes" target="_blank" rel="noopener">github.com/ramonecungcodes</a>
+    </div>
+  </header>
+
+  <h2>Summary</h2>
+  <p class="summary">Senior RPA Developer with 4+ years of hands-on UiPath experience across federal, local, and enterprise environments using Studio and Orchestrator, designing, developing, testing, and deploying scalable automation solutions, including solutions for the US Coast Guard. Proficient in Python, SQL, REST API integration, Git, and automated testing, with experience delivering systems integrations and production RPA solutions.</p>
+
+  <h2>Technical Skills</h2>
+  <div class="skillrow"><b>UiPath &amp; Enterprise RPA:</b> <span>UiPath Studio, UiPath Orchestrator (queues, assets, credentials, triggers, logging, monitoring), REFramework, attended and unattended bots, reusable automation components, enterprise RPA design, development, testing, deployment, and debugging.</span></div>
+  <div class="skillrow"><b>Automation Delivery &amp; Process Engineering:</b> <span>Automation opportunity and feasibility assessment, process discovery, requirements analysis, process mapping, technical design, implementation planning, UAT, hypercare, production support, and automation governance.</span></div>
+  <div class="skillrow"><b>Systems Integration, Programming &amp; Data:</b> <span>VB.NET, C#, Python, SQL, Bash; LINQ and DataTable manipulation; REST API integration; enterprise systems, databases, APIs, spreadsheets, and web applications; SQL Server, PostgreSQL, Excel automation, AWS, and Docker.</span></div>
+  <div class="skillrow"><b>Software Engineering &amp; Delivery Practices:</b> <span>Git, GitLab, CI/CD (Jenkins, GitLab CI), unit and integration testing, debugging, code review, performance optimization, backlog refinement, Agile/Scrum, Kanban, Orchestrator monitoring, and technical documentation.</span></div>
+
+  <h2>Experience</h2>
+
+  <div class="role"><div class="who">Senior RPA Consultant · <span>OTOT</span> (embedded with UiPath / US Coast Guard FINCEN)</div><div class="date">Oct 2024 – Present</div></div>
+  <div class="note">Fully remote · sole RPA developer for the US Coast Guard Finance Center (FINCEN) on a federal engagement</div>
+  <ul>
+    <li>Own the full RPA lifecycle as sole developer, performing process discovery, requirements analysis, PDD authoring, development, testing, UAT, deployment, and hypercare for mission-critical automation under USCG security and enterprise deployment requirements.</li>
+    <li>Design, develop, and maintain production-ready UiPath automations for 12 legacy-system processes, replacing manual operator workflows across enterprise applications without APIs and reducing manual processing by ~18 hours per week per bot.</li>
+    <li>Develop UiPath Document Understanding workflows for document ingestion, classification, extraction, and validation, while updating and tracking projects in Jira and USCG's SharePoint.</li>
+    <li>Establish development standards, REFramework patterns, reusable components, exception handling, and automation governance for the production bot fleet maintained in GitLab, improving maintainability and significantly reducing recurring support incidents.</li>
+    <li>Design and optimize UiPath Orchestrator queues, triggers, logging, monitoring, and retry strategies, enabling unattended automations to recover from transient failures and improving production reliability, communicating with stakeholders directly via Microsoft Teams.</li>
+  </ul>
+
+  <div class="role"><div class="who">Automation Developer · <span>Sarasota County Government</span> (CJIS verified)</div><div class="date">Dec 2023 – Oct 2024</div></div>
+  <div class="note">Hybrid · UiPath architect who stood up the county's RPA practice</div>
+  <ul>
+    <li>Built the county's RPA Center of Excellence as sole architect, establishing automation intake, development standards, reusable frameworks, governance, and repeatable deployment pathways from the ground up.</li>
+    <li>Delivered UiPath automations end to end, translating stakeholder requirements into process design documents (PDDs), solution design documents (SDDs), technical designs, testing, and production deployment.</li>
+    <li>Built proactive monitoring and incident-response tooling that caught failures before user impact and improved system reliability.</li>
+    <li>Introduced Git-based pull request reviews, Kanban backlog management, unit testing, and development best practices, improving configuration control, code quality, and continuous improvement across the automation practice.</li>
+  </ul>
+
+  <div class="role"><div class="who">Software Engineer II / Automation Developer · <span>Cardinal Financial</span></div><div class="date">Jul 2019 – Aug 2023</div></div>
+  <div class="note">Fully remote · Python automation and a cloud-native data warehouse</div>
+  <ul>
+    <li>Developed configurable Python and SQL automation for enterprise data workloads on AWS using Step Functions, ECS, Lambda, and PostgreSQL, supporting scalable systems integration and workflow automation with Jenkins.</li>
+    <li>Designed and integrated REST APIs with Flask and implemented pytest and Jenkins CI/CD pipelines, providing automated testing, version control, and deployment validation for every production merge with GitHub.</li>
+    <li>Built proactive monitoring, troubleshooting, and incident-response capabilities that identified failures before user impact, maintained uptime SLAs, and improved operational reliability and sustainment.</li>
+  </ul>
+
+  <div class="role"><div class="who">Application Support / RPA Team Lead · <span>UPC Insurance</span></div><div class="date">Sep 2017 – Jul 2019</div></div>
+  <ul>
+    <li>Drove a new RPA initiative from evaluation through production: self-trained on UiPath, built 8 attended and unattended workflows, and eliminated 20 hours per week of manual application-support and data-processing work; migrated the company phone system using RPA.</li>
+  </ul>
+
+  <h2>Certifications &amp; Education</h2>
+  <p class="edu">UiPath Certified Advanced RPA Developer (2019) · UiPath Certified RPA Associate (2024) · Python Institute: PCAP (2022), PCED (2024)</p>
+  <p class="edu" style="margin-top:6px;"><b>B.S., Information Sciences and Technology</b> — The Pennsylvania State University · Dean's List, 3.92 GPA</p>
+</main>
+
+<footer>© <span id="yr"></span> Ramon Eçung II</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement, btn = document.getElementById('themeToggle'), s = null;
+    try { s = localStorage.getItem('theme'); } catch (e) {}
+    if (s) root.setAttribute('data-theme', s);
+    else if (window.matchMedia && !window.matchMedia('(prefers-color-scheme: dark)').matches) root.setAttribute('data-theme', 'light');
+    function sync(){ btn.textContent = 'theme: ' + (root.getAttribute('data-theme') || 'dark'); } sync();
+    btn.addEventListener('click', function(){ var n = root.getAttribute('data-theme')==='dark'?'light':'dark'; root.setAttribute('data-theme', n); try{localStorage.setItem('theme', n);}catch(e){} sync(); });
+    document.getElementById('yr').textContent = new Date().getFullYear();
+  })();
+</script>
+</body>
+</html>

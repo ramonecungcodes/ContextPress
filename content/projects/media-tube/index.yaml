@@ -4,7 +4,7 @@
 # of raw HTML for the design-card grid and link lists).
 title: "Media Tube"
 description: "Media Tube: a self-hosted, AI-native media library. Design overview, coverage-over-time graphs, and dated coverage reports."
-og_image: "https://ramonecung.com/blog/coverage-over-time.png"
+og_image: "/projects/media-tube/coverage-over-time.png"
 brand: "ramon@ai-engineer: ~/projects/media-tube"
 
 sort_order: 100

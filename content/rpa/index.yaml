@@ -2,7 +2,7 @@
 # Same widgets and theme as /ai/; only the content and section order differ.
 title: "Ramon Eçung · UiPath RPA Developer"
 description: "Ramon Eçung II, Senior UiPath RPA Developer with 9+ years across federal, government, and enterprise environments. UiPath Studio & Orchestrator, REFramework, Document Understanding. Active Secret Clearance. Open to remote."
-og_image: "https://ramonecung.com/og/rpa.png"
+og_image: "/og/rpa.png"
 brand: "ramon@rpa-developer: ~"
 
 nav:
@@ -125,7 +125,7 @@ sections:
     note: "I write up the engineering behind my projects: architecture decisions, reliability patterns, retrieval and Document Understanding, and testing strategy."
     featured:
       href: "/blog/document-intelligence-the-model-wasnt-the-hard-part/"
-      image: "https://ramonecung.com/og/document-intelligence-the-model-wasnt-the-hard-part.png"
+      image: "/og/document-intelligence-the-model-wasnt-the-hard-part.png"
       alt: "I Built a Document Intelligence System. The Model Wasn't the Hard Part."
       eyebrow: "Featured writeup · 33 min read"
       title: "I Built a Document Intelligence System. The Model Wasn't the Hard Part."
