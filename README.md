@@ -229,6 +229,8 @@ rebuild `./dist`, ensure nginx is up — into one command:
 
 See **[DEPLOY.md](DEPLOY.md)** for first-time server setup (NPM + Cloudflare) and
 push-to-deploy automation via a Gitea Action that SSHes in and runs `deploy.sh`.
+For the day-to-day **branch → PR → merge → deploy** process — branch naming,
+commit conventions, and how the CI pipeline fits — see **[WORKFLOW.md](WORKFLOW.md)**.
 
 Both images use **pinned base tags** (`python:3.12-slim`, `nginx:1.27-alpine`)
 with `pull_policy` set so they're pulled once and reused from the local cache

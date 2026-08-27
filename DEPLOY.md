@@ -167,4 +167,8 @@ container restart.
 
 All three ultimately run the same `deploy.sh`.
 
-# deploy trigger test dfcd488
+---
+
+For the branch → PR → merge → deploy *process* around this infrastructure — branch
+naming, commit conventions, and how the Gitea Action ties in — see
+[WORKFLOW.md](WORKFLOW.md).
