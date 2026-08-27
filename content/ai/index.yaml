@@ -78,6 +78,7 @@ sections:
     id: activity
     prompt: "git log --graph"
     username: ramonecungcodes
+    color: "00ad8d"          # theme teal (accent hue 175); ghchart drops the #
     href: "https://github.com/ramonecungcodes"
     caption: "A year of public commits on GitHub. Most of my work also lives in private and self-hosted repos."
 
