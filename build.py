@@ -67,7 +67,10 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
         trim_blocks=True,
         lstrip_blocks=True,
     )
-    env.globals["now_year"] = datetime.now(timezone.utc).year
+    _built_at = datetime.now(timezone.utc)
+    env.globals["now_year"] = _built_at.year
+    # Build stamp shown in the footer so a reader can tell how fresh the page is.
+    env.globals["build_date"] = _built_at.strftime("%Y-%m-%d-%H")
     # `{{ text | markdown }}` renders a markdown string (with @@FIG figures) to
     # HTML, for the markdown widget and any rich body in a widget page.
     env.filters["markdown"] = render_markdown
