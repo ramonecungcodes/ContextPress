@@ -5,7 +5,7 @@ malformed post fails loudly at build time instead of shipping a broken page.
 """
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field, field_validator
@@ -96,7 +96,10 @@ class ContentPage(BaseModel):
 class Post(BaseModel):
     slug: str
     title: str
-    date: date
+    # A calendar date, optionally with a time. Posts sort newest-first by this
+    # value, so two posts on the same day can add a time (`2026-08-27 14:30:00`)
+    # to define their order; a bare date (`2026-08-27`) is treated as midnight.
+    date: datetime
     description: str = ""
     tags: list[str] = Field(default_factory=list)
     draft: bool = False
@@ -107,9 +110,18 @@ class Post(BaseModel):
     bundle: str = ""                  # source bundle dir (set by loader; empty for flat posts)
     body_html: str = ""               # rendered HTML (never the raw markdown)
 
+    @field_validator("date", mode="before")
+    @classmethod
+    def _promote_date(cls, v: Any) -> Any:
+        # YAML parses a bare `2026-08-27` to a date; promote it to midnight so
+        # the field is always a datetime and same-day posts can order by time.
+        if isinstance(v, date) and not isinstance(v, datetime):
+            return datetime(v.year, v.month, v.day)
+        return v
+
     @property
     def iso_date(self) -> str:
-        return self.date.isoformat()
+        return self.date.date().isoformat()
 
     @property
     def url(self) -> str:
