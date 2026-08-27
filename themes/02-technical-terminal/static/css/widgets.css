@@ -82,6 +82,51 @@ a:hover { text-decoration: underline; }
   .postcard-img, .postcard.feature .postcard-img { width: 100%; max-width: 100%; }
 }
 
+/* projects hub */
+.list-h1 { font-size: 34px; letter-spacing: -1px; margin: 10px 0 8px; color: var(--text); }
+.projects-list .lede { color: var(--muted); font-size: 15px; max-width: 720px; }
+.crumbs { font-size: 13px; margin: 0 0 18px; }
+.plist { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
+.pcard { display: block; background: var(--panel); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 24px; transition: border-color .15s, transform .15s; }
+.pcard:hover { border-color: var(--accent); transform: translateY(-2px); text-decoration: none; }
+.pcard h3 { font-size: 19px; color: var(--text); margin-bottom: 8px; }
+.pcard p { color: var(--muted); font-size: 14px; max-width: 680px; }
+.pcard .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+.pcard .tags span { font-size: 11px; color: var(--muted); background: var(--panel2);
+  border: 1px solid var(--border); padding: 3px 8px; border-radius: 5px; }
+.pcard .go { color: var(--accent); font-size: 13px; font-weight: 600; }
+.projects-note { color: var(--muted); font-size: 13px; margin-top: 22px; }
+
+/* markdown widget (rich body: project pages and the like) */
+.markdown > h1 { font-size: 34px; letter-spacing: -1px; margin: 10px 0 8px; color: var(--text); }
+.markdown > h2 { font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); margin: 44px 0 10px; font-weight: 600; }
+.markdown > p { color: var(--muted); font-size: 15px; max-width: 760px; margin: 0 0 14px; }
+.markdown a { color: var(--accent); }
+.markdown img, .markdown figure img { width: 100%; height: auto; display: block;
+  border: 1px solid var(--border); border-radius: 12px; }
+.markdown figure { margin: 0 0 22px; }
+.markdown figcaption { margin-top: 10px; font-size: 13px; color: var(--muted);
+  text-align: center; font-style: italic; }
+.markdown ul, .markdown ol { color: var(--muted); font-size: 15px; max-width: 760px;
+  margin: 0 0 14px; padding-left: 22px; }
+
+/* design-card grid (raw HTML inside a markdown body) */
+.dcard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 0 0 8px; }
+@media (max-width: 680px) { .dcard-grid { grid-template-columns: 1fr; } }
+.dcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+.dcard h3 { font-size: 15px; margin-bottom: 8px; color: var(--accent); }
+.dcard p { font-size: 13.5px; color: var(--muted); margin: 0; max-width: none; }
+
+/* stacked link buttons (reports, related links) */
+.report-links { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin: 0 0 8px; }
+.report-link { display: inline-block; max-width: 100%; font-weight: 600;
+  border: 1px solid var(--accent); border-radius: 8px; padding: 10px 16px; font-size: 14px; color: var(--accent); }
+.report-link:hover { background: var(--accent-soft); text-decoration: none; }
+.report-link.soft { border-color: var(--border); font-weight: 400; color: var(--text); }
+.report-link.soft:hover { border-color: var(--accent); }
+
 /* GitHub contribution grid (ghchart) */
 .contributions .ghchart-link { display: block; }
 .contributions .ghchart { display: block; width: 100%; max-width: 100%;

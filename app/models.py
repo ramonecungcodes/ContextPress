@@ -76,6 +76,11 @@ class ContentPage(BaseModel):
     nav: list[NavItem] = Field(default_factory=list)          # topbar links
     footer_links: list[NavItem] = Field(default_factory=list)  # footer links
     sections: list[dict[str, Any]] = Field(default_factory=list)
+    # Used when this page is aggregated by a listing (e.g. a project under a
+    # projects hub): the sort key plus the card's blurb and tags.
+    sort_order: int = 100
+    summary: str = ""
+    tags: list[str] = Field(default_factory=list)
 
     @field_validator("sections")
     @classmethod
@@ -139,3 +144,25 @@ class BlogPage(BaseModel):
     per_page: int = Field(default=10, ge=1)
     prompt: str = ""              # section label, e.g. "ls ~/writing"
     intro: str = ""              # short blurb above the list
+
+
+class ProjectsPage(BaseModel):
+    """A hub that aggregates project pages, declared by an index.yaml with a
+    `list: projects` key (content/projects/index.yaml -> "/projects/"). It lists
+    every ContentPage directly beneath its own route (e.g. /projects/<slug>/) as
+    a card, ordered by each project's `sort_order` (ascending, so 100 comes
+    before 200; use 150 to slot one between). Shares the chrome fields.
+    """
+    kind: Literal["projects"] = "projects"
+    route: str = ""
+    title: str = ""
+    description: str = ""
+    og_image: str = ""
+    brand: str = ""
+    theme_toggle: bool = True
+    nav: list[NavItem] = Field(default_factory=list)
+    footer_links: list[NavItem] = Field(default_factory=list)
+    prompt: str = ""              # section label, e.g. "ls ~/projects"
+    heading: str = ""            # h1 shown above the list (e.g. "Projects")
+    intro: str = ""              # lede blurb under the heading
+    note: str = ""               # optional trailing note (HTML allowed)

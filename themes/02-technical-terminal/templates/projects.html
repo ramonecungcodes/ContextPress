@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block main %}
+<section class="section projects-list">
+  {% if page.prompt %}<p class="prompt">{{ page.prompt }}</p>{% endif %}
+  {% if page.heading %}<h1 class="list-h1">{{ page.heading }}</h1>{% endif %}
+  {% if page.intro %}<p class="lede">{{ page.intro }}</p>{% endif %}
+  <div class="plist">
+    {% for proj in projects %}
+    <a class="pcard" href="{{ proj.route }}">
+      <h3>{{ proj.title }}</h3>
+      {% if proj.summary %}<p>{{ proj.summary }}</p>{% endif %}
+      {% if proj.tags %}
+      <div class="tags">{% for t in proj.tags %}<span>{{ t }}</span>{% endfor %}</div>
+      {% endif %}
+      <span class="go">Open project &rarr;</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% if page.note %}<p class="projects-note">{{ page.note | safe }}</p>{% endif %}
+</section>
+{% endblock %}

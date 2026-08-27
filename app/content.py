@@ -23,7 +23,14 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.util import ClassNotFound
 
-from .models import BlogPage, ContentPage, Post, RedirectPage, SiteConfig
+from .models import (
+    BlogPage,
+    ContentPage,
+    Post,
+    ProjectsPage,
+    RedirectPage,
+    SiteConfig,
+)
 
 WORDS_PER_MINUTE = 200
 
@@ -141,17 +148,19 @@ def load_pages(content_dir: Path) -> list[RedirectPage | ContentPage]:
         route = "/" + "/".join(rel.parts[:-1])
         if not route.endswith("/"):
             route += "/"
-        is_post_list = raw.pop("list", None) == "posts"  # discriminator, not a field
+        listing = raw.pop("list", None)  # discriminator, not a model field
         if "redirect" in raw:
             pages.append(RedirectPage(route=route, **raw))
         elif "sections" in raw:
             pages.append(ContentPage(route=route, **raw))
-        elif is_post_list or "per_page" in raw:
+        elif listing == "projects":
+            pages.append(ProjectsPage(route=route, **raw))
+        elif listing == "posts" or "per_page" in raw:
             pages.append(BlogPage(route=route, **raw))
         else:
             raise SystemExit(
                 f"{path}: page matches no kind (needs 'redirect:', 'sections:', "
-                f"or 'list: posts'/'per_page:'); nothing to generate"
+                f"'list: posts'/'per_page:', or 'list: projects'); nothing to generate"
             )
     return pages
 

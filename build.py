@@ -26,7 +26,13 @@ from xml.sax.saxutils import escape
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.exceptions import TemplateNotFound
 
-from app.content import load_pages, load_posts, load_site, pygments_css
+from app.content import (
+    load_pages,
+    load_posts,
+    load_site,
+    pygments_css,
+    render_markdown,
+)
 
 ROOT = Path(__file__).parent
 
@@ -62,6 +68,9 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
         lstrip_blocks=True,
     )
     env.globals["now_year"] = datetime.now(timezone.utc).year
+    # `{{ text | markdown }}` renders a markdown string (with @@FIG figures) to
+    # HTML, for the markdown widget and any rich body in a widget page.
+    env.filters["markdown"] = render_markdown
 
     # Fresh output. Clear the directory's *contents* rather than removing the
     # directory itself, so this works when out_dir is a bind mount (removing a
@@ -100,6 +109,7 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
     redirect_tmpl = env.get_template("redirect.html")
     page_tmpl = env.get_template("page.html")
     blog_tmpl = env.get_template("blog.html")
+    projects_tmpl = env.get_template("projects.html")
 
     def emit(dest: Path, html: str) -> None:
         """Write an HTML document, first qualifying its internal links. `depth`
@@ -116,12 +126,19 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
         # Page bundle: copy sibling files (images, downloads) into the page's
         # output dir so its links resolve. Runs for every page kind, so a root
         # asset like content/headshot.jpg ships to dist/headshot.jpg (beside the
-        # root redirect). Config files and subdirectories (which are other
-        # routes) are skipped.
+        # root redirect). index.yaml/site.yaml are skipped; a subdirectory that
+        # is itself a route (has its own index.yaml) is left for that route to
+        # emit, but a plain asset dir (e.g. img/) is copied wholesale.
         src_bundle = content_dir / _route_to_index(page.route).parent
         if src_bundle.is_dir():
             for asset in src_bundle.iterdir():
-                if asset.is_file() and asset.name not in ("index.yaml", "site.yaml"):
+                if asset.name in ("index.yaml", "site.yaml"):
+                    continue
+                if asset.is_dir():
+                    if (asset / "index.yaml").exists():
+                        continue  # a nested route owns this directory
+                    shutil.copytree(asset, dest.parent / asset.name, dirs_exist_ok=True)
+                elif asset.is_file():
                     shutil.copy2(asset, dest.parent / asset.name)
 
         if page.kind == "redirect":
@@ -131,6 +148,11 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
                                             canonical=canonical))
         elif page.kind == "blog":
             _emit_blog(page, posts, out_dir, base, blog_tmpl, site, emit)
+        elif page.kind == "projects":
+            projects = _child_projects(page.route, pages)
+            canonical = base + page.route if base else page.route
+            emit(dest, projects_tmpl.render(site=site, page=page,
+                                            projects=projects, canonical=canonical))
         else:  # content page
             canonical = base + page.route if base else page.route
             emit(dest, page_tmpl.render(site=site, page=page, posts=posts,
@@ -189,6 +211,19 @@ def _route_to_index(route: str) -> Path:
     "/ai/" -> ai/index.html."""
     parts = [p for p in route.strip("/").split("/") if p]
     return Path(*parts, "index.html") if parts else Path("index.html")
+
+
+def _child_projects(hub_route, pages):
+    """Content pages directly beneath `hub_route` (e.g. /projects/<slug>/),
+    ordered by sort_order then title, for a projects hub to list as cards."""
+    kids = [
+        p for p in pages
+        if getattr(p, "kind", None) == "content"
+        and p.route != hub_route
+        and p.route.startswith(hub_route)
+        and "/" not in p.route[len(hub_route):].strip("/")
+    ]
+    return sorted(kids, key=lambda p: (p.sort_order, p.title))
 
 
 def _emit_blog(page, posts, out_dir, base, blog_tmpl, site, emit):

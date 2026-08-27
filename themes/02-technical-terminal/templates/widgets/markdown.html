@@ -1,0 +1,7 @@
+{# Rich markdown body (supports @@FIG figures and raw HTML). Optional crumb and
+   prompt lines above it. #}
+<section class="section markdown"{% if w.id %} id="{{ w.id }}"{% endif %}>
+  {% if w.crumb %}<p class="crumbs"><a href="{{ w.crumb.href }}">&larr; {{ w.crumb.label }}</a></p>{% endif %}
+  {% if w.prompt %}<p class="prompt">{{ w.prompt }}</p>{% endif %}
+  {{ w.body | markdown | safe }}
+</section>
