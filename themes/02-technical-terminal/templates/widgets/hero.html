@@ -1,0 +1,31 @@
+<section class="hero"{% if w.id %} id="{{ w.id }}"{% endif %}>
+  <div class="hero-text">
+    <h1>{{ w.name }}</h1>
+    {% if w.role %}<div class="role">{{ w.role }}</div>{% endif %}
+    {% if w.lede %}<p class="lede">{{ w.lede }}<span class="cursor">&nbsp;</span></p>{% endif %}
+    {% if w.badges %}
+    <div class="badges">
+      {% for b in w.badges %}<span class="badge">{{ b }}</span>{% endfor %}
+    </div>
+    {% endif %}
+    {% if w.primary or w.resume or w.links %}
+    <div class="cta-row">
+      {% if w.primary %}<a class="btn solid" href="{{ w.primary.href }}">{{ w.primary.label }}</a>{% endif %}
+      {% if w.resume %}
+      <details class="dd">
+        <summary class="btn">{{ w.resume_label or 'résumé' }} ▾</summary>
+        <div class="dd-menu">
+          {% for r in w.resume %}<a href="{{ r.href }}">{{ r.label }}</a>{% endfor %}
+        </div>
+      </details>
+      {% endif %}
+      {% if w.links %}
+      <span class="iconlinks">
+        {% for l in w.links %}<a href="{{ l.href }}"{% if l.href.startswith('http') %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>{% endfor %}
+      </span>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+  {% if w.avatar %}<img class="avatar" src="{{ w.avatar.src }}" alt="{{ w.avatar.alt }}" />{% endif %}
+</section>

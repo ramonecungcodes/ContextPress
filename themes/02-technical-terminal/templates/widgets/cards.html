@@ -1,0 +1,25 @@
+<section class="section"{% if w.id %} id="{{ w.id }}"{% endif %}>
+  {% if w.prompt %}<p class="prompt">{{ w.prompt }}</p>{% endif %}
+  <div class="grid projects">
+    {% for c in w['items'] %}
+    <div class="card{% if c.feature %} feature{% endif %}">
+      <h3>{{ c.title }}</h3>
+      {% if c.sub %}<div class="sub">{{ c.sub }}</div>{% endif %}
+      {% if c.bullets %}
+      <ul>
+        {% for b in c.bullets %}<li>{{ b }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+      {% if c.tags %}
+      <div class="tag-row">{% for t in c.tags %}<span class="tag">{{ t }}</span>{% endfor %}</div>
+      {% endif %}
+      {% if c.links %}
+      <div class="card-links">
+        {% for l in c.links %}<a href="{{ l.href }}"{% if l.href.startswith('http') %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>{% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% if w.note %}<p class="grid-note">{{ w.note }}</p>{% endif %}
+</section>

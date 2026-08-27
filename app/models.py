@@ -6,8 +6,9 @@ malformed post fails loudly at build time instead of shipping a broken page.
 from __future__ import annotations
 
 from datetime import date
+from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class NavItem(BaseModel):
@@ -49,9 +50,42 @@ class RedirectPage(BaseModel):
     The file's location mirrors the webroot, so content/index.yaml -> "/" and
     content/old/index.yaml -> "/old/". Rendered to a static meta-refresh page.
     """
+    kind: Literal["redirect"] = "redirect"
     redirect: str                 # target URL or path, e.g. "/ai/"
     title: str = "Redirecting"    # link text on the fallback page
     route: str = ""               # source route, filled in by the loader ("/", "/old/")
+
+
+class ContentPage(BaseModel):
+    """A page composed of ordered widgets, defined entirely in `index.yaml`.
+
+    Like RedirectPage it mirrors the webroot (content/ai/index.yaml -> "/ai/").
+    Each entry in `sections` is a widget: a dict that must carry a `widget:` key
+    naming a template under themes/<theme>/templates/widgets/<widget>.html. The
+    rest of the dict is that widget's data, passed to the template as `w`. Adding
+    or reusing a widget is therefore just a template file plus a YAML block, with
+    no Python change. The page chrome (topbar nav, footer) is data-driven too.
+    """
+    kind: Literal["content"] = "content"
+    route: str = ""               # filled in by the loader
+    title: str = ""               # <title> and og:title
+    description: str = ""         # meta description / og:description
+    og_image: str = ""            # absolute URL for social cards (optional)
+    brand: str = ""               # topbar brand text (e.g. "ramon@ai-engineer: ~")
+    theme_toggle: bool = True     # show the dark/light toggle in the topbar
+    nav: list[NavItem] = Field(default_factory=list)          # topbar links
+    footer_links: list[NavItem] = Field(default_factory=list)  # footer links
+    sections: list[dict[str, Any]] = Field(default_factory=list)
+
+    @field_validator("sections")
+    @classmethod
+    def _sections_name_a_widget(cls, sections):
+        for i, s in enumerate(sections):
+            if not isinstance(s, dict) or not isinstance(s.get("widget"), str):
+                raise ValueError(
+                    f"sections[{i}] must be a mapping with a string 'widget:' key"
+                )
+        return sections
 
 
 class Post(BaseModel):

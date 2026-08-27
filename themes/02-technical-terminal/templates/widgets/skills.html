@@ -1,0 +1,9 @@
+<section class="section"{% if w.id %} id="{{ w.id }}"{% endif %}>
+  {% if w.prompt %}<p class="prompt">{{ w.prompt }}</p>{% endif %}
+  <div class="skills">
+    {% for c in w.categories %}
+    <div class="skillcat"><h4>{{ c.heading }}</h4><p>{{ c.body }}</p></div>
+    {% endfor %}
+  </div>
+  {% if w.readmore %}<a class="readmore" href="{{ w.readmore.href }}">{{ w.readmore.label }}</a>{% endif %}
+</section>

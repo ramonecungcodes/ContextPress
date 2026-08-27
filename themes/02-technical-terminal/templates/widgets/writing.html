@@ -1,0 +1,23 @@
+<section class="section writing"{% if w.id %} id="{{ w.id }}"{% endif %}>
+  {% if w.prompt %}<p class="prompt">{{ w.prompt }}</p>{% endif %}
+  {% if w.note %}<p class="note">{{ w.note }}</p>{% endif %}
+  {% if w.featured %}
+  <a class="featured-post" href="{{ w.featured.href }}">
+    {% if w.featured.image %}<img src="{{ w.featured.image }}" alt="{{ w.featured.alt }}" />{% endif %}
+    <div class="fp-body">
+      {% if w.featured.eyebrow %}<div class="fp-eyebrow">{{ w.featured.eyebrow }}</div>{% endif %}
+      <h3>{{ w.featured.title }}</h3>
+      {% if w.featured.excerpt %}<p>{{ w.featured.excerpt }}</p>{% endif %}
+      <span class="fp-more">{{ w.featured.cta or 'Read the writeup →' }}</span>
+    </div>
+  </a>
+  {% endif %}
+  {% if w.posts %}
+  <div class="postmini">
+    {% for p in w.posts %}
+    <a class="pm" href="{{ p.href }}"><span class="pm-title">{{ p.title }}</span><span class="pm-date">{{ p.meta }}</span></a>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if w.cta %}<a class="btn" href="{{ w.cta.href }}">{{ w.cta.label }}</a>{% endif %}
+</section>

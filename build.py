@@ -80,21 +80,38 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
 
     env.globals["static_url"] = static_url
 
-    # webroot-mirroring pages (currently: redirects). A page at "/" overrides
-    # the home template below, so an index.yaml redirect wins over site.home.
+    # webroot-mirroring pages: redirects and widget-composed content pages.
+    # A page at "/" overrides the home template below (index.yaml wins over
+    # site.home).
     redirect_tmpl = env.get_template("redirect.html")
+    page_tmpl = env.get_template("page.html")
     base = site.base_url.rstrip("/")
     routes = {p.route for p in pages}
     for page in pages:
-        target = page.redirect
-        canonical = base + target if base and target.startswith("/") else target
         dest = out_dir / _route_to_index(page.route)
         dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(
-            redirect_tmpl.render(site=site, page=page, target=target,
+        if page.kind == "redirect":
+            target = page.redirect
+            canonical = base + target if base and target.startswith("/") else target
+            dest.write_text(
+                redirect_tmpl.render(site=site, page=page, target=target,
+                                     canonical=canonical),
+                encoding="utf-8",
+            )
+        else:  # content page
+            # Page bundle: copy any assets that live beside index.yaml (images,
+            # downloads) so relative links in the page resolve.
+            src_bundle = content_dir / _route_to_index(page.route).parent
+            if src_bundle.is_dir():
+                for asset in src_bundle.iterdir():
+                    if asset.is_file() and asset.name != "index.yaml":
+                        shutil.copy2(asset, dest.parent / asset.name)
+            canonical = base + page.route if base else page.route
+            dest.write_text(
+                page_tmpl.render(site=site, page=page, posts=posts,
                                  canonical=canonical),
-            encoding="utf-8",
-        )
+                encoding="utf-8",
+            )
 
     # home page ("/"): the template named by site.home ("index" or "coming-soon"),
     # unless a redirect page already claimed "/".
@@ -140,7 +157,7 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
         (out_dir / "sitemap.xml").write_text(_sitemap(site, posts), encoding="utf-8")
 
     home_desc = "redirect" if "/" in routes else site.home
-    print(f"Built {len(posts)} post(s), {len(pages)} redirect(s) -> {out_dir}  "
+    print(f"Built {len(posts)} post(s), {len(pages)} page(s) -> {out_dir}  "
           f"(home={home_desc}, "
           f"crawlers={'allowed' if site.robots.allow else 'blocked'})")
 
