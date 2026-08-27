@@ -1,6 +1,6 @@
 <footer class="site">
   <div class="wrap foot-row">
-    <span>&copy; {{ now_year }} {{ site.author or site.title }} &mdash; built with ContextPress</span>
+    <span>&copy; {{ now_year }} {{ site.author or site.title }} &mdash; built with <a href="https://github.com/ramonecungcodes/ContextPress" target="_blank" rel="noopener">ContextPress</a></span>
     <div>
       <a href="/feed.xml">rss</a>
       {% for item in site.nav %} &middot; <a href="{{ item.href }}">{{ item.label }}</a>{% endfor %}

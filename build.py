@@ -192,6 +192,20 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
 
         emit(post_dir / "index.html", post_tmpl.render(site=site, post=post))
 
+    # Raw HTML pages: any *.html in the content tree is copied to its mirrored
+    # dist path verbatim (with internal links qualified like everything else),
+    # for hand-authored / snapshot pages that already carry their own markup
+    # (e.g. dated coverage reports). posts/ and _/.-prefixed paths are skipped.
+    raw_html = 0
+    for html_path in sorted(content_dir.rglob("*.html")):
+        rel = html_path.relative_to(content_dir)
+        if rel.parts[0] == "posts" or any(p.startswith((".", "_")) for p in rel.parts):
+            continue
+        dest = out_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        emit(dest, html_path.read_text(encoding="utf-8"))
+        raw_html += 1
+
     # RSS
     (out_dir / "feed.xml").write_text(_rss(site, posts), encoding="utf-8")
 
@@ -201,7 +215,7 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
         (out_dir / "sitemap.xml").write_text(_sitemap(site, posts), encoding="utf-8")
 
     home_desc = "redirect" if "/" in routes else site.home
-    print(f"Built {len(posts)} post(s), {len(pages)} page(s) -> {out_dir}  "
+    print(f"Built {len(posts)} post(s), {len(pages)} page(s), {raw_html} raw -> {out_dir}  "
           f"(home={home_desc}, base_url={site.base_url or 'relative'}, "
           f"crawlers={'allowed' if site.robots.allow else 'blocked'})")
 
