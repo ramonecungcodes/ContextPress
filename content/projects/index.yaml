@@ -1,0 +1,24 @@
+# /projects/ — hub that aggregates the project pages below it.
+# `list: projects` marks this as the aggregator; it lists every content page at
+# /projects/<slug>/ as a card, ordered by each project's sort_order (ascending).
+list: projects
+title: "Projects · Ramon Eçung"
+description: "Systems Ramon Eçung builds and operates, documented with architecture, engineering decisions, and measurements."
+og_image: "https://ramonecung.com/og/ai.png"
+brand: "ramon@ai-engineer: ~/projects"
+prompt: "ls ~/projects"
+heading: "Projects"
+intro: "Systems I build and operate on my own hardware, documented with architecture, engineering decisions, and the measurements that show they work."
+
+nav:
+  - { label: "AI", href: "/ai/" }
+  - { label: "RPA", href: "/rpa/" }
+  - { label: "blog", href: "/blog/" }
+
+footer_links:
+  - { label: "success@ramonecung.com", href: "mailto:success@ramonecung.com" }
+  - { label: "github", href: "https://github.com/ramonecungcodes" }
+  - { label: "AI", href: "/ai/" }
+  - { label: "blog", href: "/blog/" }
+
+note: 'More projects are being written up. In the meantime, the <a href="/blog/">blog</a> goes deep on the engineering behind them.'

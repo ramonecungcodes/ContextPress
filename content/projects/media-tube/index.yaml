@@ -1,0 +1,65 @@
+# /projects/media-tube/ — a project page under the /projects/ hub.
+# sort_order positions it in the hub listing (100 = first); summary + tags feed
+# its hub card. The body is one markdown widget (rich prose, images, and a bit
+# of raw HTML for the design-card grid and link lists).
+title: "Media Tube"
+description: "Media Tube: a self-hosted, AI-native media library. Design overview, coverage-over-time graphs, and dated coverage reports."
+og_image: "https://ramonecung.com/blog/coverage-over-time.png"
+brand: "ramon@ai-engineer: ~/projects/media-tube"
+
+sort_order: 100
+summary: "A private, AI-native, self-hosted media library: web/API split, durable job workers, vision + transcription + face AI with human review, and coverage tracked over time."
+tags: ["Python", "FastAPI", "PostgreSQL/pgvector", "Docker", "local AI"]
+
+nav:
+  - { label: "projects", href: "/projects/" }
+  - { label: "blog", href: "/blog/" }
+  - { label: "home", href: "/ai/" }
+
+footer_links:
+  - { label: "all projects", href: "/projects/" }
+  - { label: "blog", href: "/blog/" }
+
+sections:
+  - widget: markdown
+    crumb: { label: "projects", href: "/projects/" }
+    prompt: "cat media-tube/README.md"
+    body: |
+      # Media Tube
+
+      A private, self-hosted library for a large video and photo collection: a multi-user alternative to handing your media to a cloud service, with a custom player, keyword and semantic search, an AI enrichment layer, and the operational discipline to run it in production.
+
+      ## What it is
+
+      Media Tube grew from three throwaway scripts into a containerized system. It is a Python application split into a server-rendered web dashboard and a separate HTTP API, backed by PostgreSQL with pgvector, with a background-job system for the slow work. The AI layer is what makes it more than a file browser: automatic tagging from a vision model, Whisper transcription and translation, face and actor recognition, and embedding-based similarity, each behind a human-in-the-loop review queue so the automation stays trustworthy.
+
+      ## Design overview
+
+      <div class="dcard-grid">
+      <div class="dcard"><h3>Web / API split</h3><p>A server-rendered dashboard for the UI and a separate HTTP API that owns the business logic, so logic is unit-testable and reusable instead of reachable only through an HTTP handler.</p></div>
+      <div class="dcard"><h3>Durable job system</h3><p>Slow work (transcode, tagging, transcription, embedding) runs on background workers with leases, heartbeats, and retries, the same reliability patterns that matter for unattended automation.</p></div>
+      <div class="dcard"><h3>AI enrichment, reviewed</h3><p>Vision tagging, Whisper transcription/translation, face and actor recognition, and pgvector similarity, each writing to a review queue with a visible audit trail rather than acting silently.</p></div>
+      <div class="dcard"><h3>Operable in production</h3><p>Docker Compose, pinned Nginx, reversible migrations, and a single deployment gate that runs tests, security scanners, a schema-aware SQL check, and Playwright browser tests before anything ships.</p></div>
+      </div>
+
+      ## Test coverage over time
+
+      I treat testing as a first-class concern and track coverage report-to-report rather than chasing a single badge. Overall coverage moved from 62% to 79% as business logic migrated into the unit-testable API layer.
+
+      ![Media Tube overall coverage rising from 62% to 79%](coverage-over-time.png)
+
+      ![Media Tube modules by coverage tier over time](coverage-tiers.png)
+
+      ## Coverage reports
+
+      <div class="report-links">
+      <a class="report-link" href="/projects/media-tube/reports/media-tube-test-coverage-report-2026-08-27/">&rarr; Coverage survey (2026-08-27) &middot; 79%</a>
+      <a class="report-link" href="/projects/media-tube/reports/media-tube-test-coverage-report-2026-08-21/">&rarr; Coverage survey (2026-08-21) &middot; 62%</a>
+      </div>
+
+      ## Related writing
+
+      <div class="report-links">
+      <a class="report-link soft" href="/blog/media-tube-media-platform/">&rarr; From Three Scripts to a Private Media Platform</a>
+      <a class="report-link soft" href="/blog/media-tube-testing-strategy/">&rarr; From a Test Suite to a Testing Strategy</a>
+      </div>
