@@ -56,6 +56,32 @@ a:hover { text-decoration: underline; }
 .grid-note { margin-top: 22px; font-size: 13px; color: var(--muted); }
 .grid-intro { max-width: 730px; margin-bottom: 24px; font-size: 14px; color: var(--muted); }
 
+/* blog listing */
+.postcard { display: flex; gap: 22px; align-items: flex-start;
+  border: 1px solid var(--border); border-radius: 12px; padding: 22px;
+  background: var(--panel); margin-bottom: 16px; text-decoration: none;
+  transition: border-color .15s ease, transform .15s ease; }
+.postcard:hover { border-color: var(--accent); transform: translateY(-2px); text-decoration: none; }
+.postcard.img-right { flex-direction: row-reverse; }
+.postcard.feature { border-color: var(--accent);
+  background: linear-gradient(180deg, var(--accent-soft), var(--panel)); }
+.postcard-img { width: 240px; max-width: 42%; aspect-ratio: 16 / 10; object-fit: cover;
+  border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0; }
+.postcard.feature .postcard-img { width: 320px; }
+.postcard-body { flex: 1; min-width: 0; }
+.postcard .meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px;
+  color: var(--muted); margin-bottom: 8px; }
+.postcard h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 0 0 6px; letter-spacing: -.01em; }
+.postcard.feature h3 { font-size: 21px; }
+.postcard-body p { color: var(--muted); font-size: 14px; margin: 0; line-height: 1.6; }
+.postcard-more { display: inline-block; margin-top: 12px; font-size: 13px; color: var(--accent); font-weight: 600; }
+.pagination { display: flex; align-items: center; gap: 16px; margin-top: 28px; }
+.pagination .page-count { font-size: 13px; color: var(--muted); }
+@media (max-width: 600px) {
+  .postcard, .postcard.img-right { flex-direction: column; }
+  .postcard-img, .postcard.feature .postcard-img { width: 100%; max-width: 100%; }
+}
+
 /* GitHub contribution grid (ghchart) */
 .contributions .ghchart-link { display: block; }
 .contributions .ghchart { display: block; width: 100%; max-width: 100%;

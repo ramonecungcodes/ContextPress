@@ -99,6 +99,7 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
     # site.home).
     redirect_tmpl = env.get_template("redirect.html")
     page_tmpl = env.get_template("page.html")
+    blog_tmpl = env.get_template("blog.html")
 
     def emit(dest: Path, html: str) -> None:
         """Write an HTML document, first qualifying its internal links. `depth`
@@ -128,6 +129,8 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
             canonical = base + target if base and target.startswith("/") else target
             emit(dest, redirect_tmpl.render(site=site, page=page, target=target,
                                             canonical=canonical))
+        elif page.kind == "blog":
+            _emit_blog(page, posts, out_dir, base, blog_tmpl, site, emit)
         else:  # content page
             canonical = base + page.route if base else page.route
             emit(dest, page_tmpl.render(site=site, page=page, posts=posts,
@@ -184,6 +187,42 @@ def _route_to_index(route: str) -> Path:
     "/ai/" -> ai/index.html."""
     parts = [p for p in route.strip("/").split("/") if p]
     return Path(*parts, "index.html") if parts else Path("index.html")
+
+
+def _emit_blog(page, posts, out_dir, base, blog_tmpl, site, emit):
+    """Generate the paginated blog listing for a BlogPage.
+
+    Posts are ordered featured-first (each group keeps its incoming order, which
+    is newest-first) and split into pages of page.per_page. Page 1 is page.route
+    ("/blog/"); page N (>=2) is "<route>page/N/". Prev/next links stitch them.
+    """
+    featured = [p for p in posts if p.featured]
+    rest = [p for p in posts if not p.featured]
+    ordered = featured + rest
+    per = page.per_page
+    total_pages = max(1, (len(ordered) + per - 1) // per)
+
+    for i in range(total_pages):
+        n = i + 1
+        chunk = ordered[i * per:(i + 1) * per]
+        route = page.route if n == 1 else f"{page.route}page/{n}/"
+        dest = out_dir / _route_to_index(route)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+
+        prev_url = None
+        if n == 2:
+            prev_url = page.route
+        elif n > 2:
+            prev_url = f"{page.route}page/{n - 1}/"
+        next_url = f"{page.route}page/{n + 1}/" if n < total_pages else None
+
+        title = page.title if n == 1 else f"{page.title} · page {n}"
+        canonical = (base + route) if base else route
+        emit(dest, blog_tmpl.render(
+            site=site, page=page, posts=chunk, title=title,
+            page_num=n, total_pages=total_pages,
+            prev_url=prev_url, next_url=next_url, canonical=canonical,
+        ))
 
 
 # href/src values that must NOT be rewritten: external URLs, protocol-relative

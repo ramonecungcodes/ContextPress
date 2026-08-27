@@ -96,6 +96,9 @@ class Post(BaseModel):
     tags: list[str] = Field(default_factory=list)
     draft: bool = False
     reading_time: int | None = None   # minutes; auto-computed if omitted
+    featured: bool = False            # highlight this post in the blog listing
+    image: str = ""                   # optional cover image (bundle-relative or absolute)
+    image_side: Literal["left", "right"] = "left"  # which side the cover sits on
     body_html: str = ""               # rendered HTML (never the raw markdown)
 
     @property
@@ -105,3 +108,33 @@ class Post(BaseModel):
     @property
     def url(self) -> str:
         return f"/posts/{self.slug}/"
+
+    @property
+    def image_url(self) -> str:
+        """Resolve the cover image to a site path. A bundle-relative name
+        (e.g. cover.png) lives beside the post, so it resolves under the post's
+        own URL; an absolute path or full URL is used as-is."""
+        if not self.image or self.image.startswith(("/", "http://", "https://")):
+            return self.image
+        return f"{self.url}{self.image}"
+
+
+class BlogPage(BaseModel):
+    """A paginated listing of posts, declared by an index.yaml with a
+    `list: posts` key (or a `per_page:` setting). Mirrors the webroot like the
+    other page kinds (content/blog/index.yaml -> "/blog/"), and shares the same
+    chrome fields as ContentPage. `per_page` splits the posts across
+    /blog/, /blog/page/2/, ... Posts marked `featured` sort to the front.
+    """
+    kind: Literal["blog"] = "blog"
+    route: str = ""
+    title: str = ""
+    description: str = ""
+    og_image: str = ""
+    brand: str = ""
+    theme_toggle: bool = True
+    nav: list[NavItem] = Field(default_factory=list)
+    footer_links: list[NavItem] = Field(default_factory=list)
+    per_page: int = Field(default=10, ge=1)
+    prompt: str = ""              # section label, e.g. "ls ~/writing"
+    intro: str = ""              # short blurb above the list

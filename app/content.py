@@ -22,7 +22,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.util import ClassNotFound
 
-from .models import ContentPage, Post, RedirectPage, SiteConfig
+from .models import BlogPage, ContentPage, Post, RedirectPage, SiteConfig
 
 WORDS_PER_MINUTE = 200
 
@@ -94,16 +94,17 @@ def load_pages(content_dir: Path) -> list[RedirectPage | ContentPage]:
     `index.yaml` produces that directory's `index.html`. content/index.yaml is
     the site root ("/"), content/ai/index.yaml is "/ai/", and so on.
 
-    Two page kinds are supported, distinguished by their keys:
-      - `redirect:` -> a static meta-refresh redirect (RedirectPage)
-      - `sections:` -> a page composed of widgets (ContentPage)
+    Page kinds are distinguished by their keys:
+      - `redirect:`            -> a static meta-refresh redirect (RedirectPage)
+      - `sections:`            -> a page composed of widgets (ContentPage)
+      - `list: posts` /        -> a paginated post listing (BlogPage)
+        `per_page:`
 
     posts/ owns its own generation (via index.md bundles) and is skipped, as are
-    `_`/`.`-prefixed paths (drafts, dotfiles). An index.yaml with neither key is
-    an error, so an unsupported page kind fails loudly rather than shipping
-    nothing.
+    `_`/`.`-prefixed paths (drafts, dotfiles). An index.yaml matching no kind is
+    an error, so an unsupported page fails loudly rather than shipping nothing.
     """
-    pages: list[RedirectPage | ContentPage] = []
+    pages: list[RedirectPage | ContentPage | BlogPage] = []
     for path in sorted(content_dir.rglob("index.yaml")):
         rel = path.relative_to(content_dir)
         if rel.parts[0] == "posts" or any(
@@ -114,14 +115,17 @@ def load_pages(content_dir: Path) -> list[RedirectPage | ContentPage]:
         route = "/" + "/".join(rel.parts[:-1])
         if not route.endswith("/"):
             route += "/"
+        is_post_list = raw.pop("list", None) == "posts"  # discriminator, not a field
         if "redirect" in raw:
             pages.append(RedirectPage(route=route, **raw))
         elif "sections" in raw:
             pages.append(ContentPage(route=route, **raw))
+        elif is_post_list or "per_page" in raw:
+            pages.append(BlogPage(route=route, **raw))
         else:
             raise SystemExit(
-                f"{path}: page has neither a 'redirect:' nor a 'sections:' key; "
-                f"nothing to generate"
+                f"{path}: page matches no kind (needs 'redirect:', 'sections:', "
+                f"or 'list: posts'/'per_page:'); nothing to generate"
             )
     return pages
 

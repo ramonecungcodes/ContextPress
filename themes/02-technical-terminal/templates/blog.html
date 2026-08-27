@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block main %}
+<section class="section blog-list">
+  {% if page.prompt %}<p class="prompt">{{ page.prompt }}</p>{% endif %}
+  {% if page.intro %}<p class="grid-intro">{{ page.intro }}</p>{% endif %}
+
+  {% for post in posts %}
+  <a class="postcard{% if post.featured %} feature{% endif %}{% if post.image %} img-{{ post.image_side }}{% endif %}" href="{{ post.url }}">
+    {% if post.image %}<img class="postcard-img" src="{{ post.image_url }}" alt="{{ post.title }}" loading="lazy" />{% endif %}
+    <div class="postcard-body">
+      <div class="meta">
+        {% for tag in post.tags %}<span class="tag">[{{ tag }}]</span>{% endfor %}
+        <span>{{ post.iso_date }}</span>
+        {% if post.reading_time %}<span>{{ post.reading_time }} min</span>{% endif %}
+      </div>
+      <h3>{{ post.title }}</h3>
+      {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+      <span class="postcard-more">Read the writeup →</span>
+    </div>
+  </a>
+  {% endfor %}
+
+  {% if total_pages > 1 %}
+  <nav class="pagination">
+    {% if prev_url %}<a class="btn" href="{{ prev_url }}">← newer</a>{% endif %}
+    <span class="page-count">page {{ page_num }} / {{ total_pages }}</span>
+    {% if next_url %}<a class="btn" href="{{ next_url }}">older →</a>{% endif %}
+  </nav>
+  {% endif %}
+</section>
+{% endblock %}
