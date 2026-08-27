@@ -1,5 +1,7 @@
-# build output
+# build output + server-side promoted webroot and dated backups
 dist/
+dist-webroot/
+dist-webroot-*/
 
 # drafts: unfinished writing stays local, never in the public repo.
 # The folder itself is kept (via .gitkeep); everything else is ignored.

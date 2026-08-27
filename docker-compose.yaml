@@ -22,15 +22,16 @@ services:
       - ./dist:/src/dist         # writable: the generated site lands on the host
     profiles: ["tools"]          # excluded from `docker compose up`
 
-  # Always-on web server. Serves the bind-mounted ./dist, so updating those
-  # files (via the build service above) is picked up without restarting.
+  # Always-on web server. Serves the bind-mounted ./dist-webroot (the promoted
+  # live site). deploy.sh renders into ./dist, then promotes it into
+  # ./dist-webroot in place, so the swap is picked up without restarting.
   web:
     image: nginx:1.27-alpine
     pull_policy: missing         # pinned tag; pulled once, then cached locally
     container_name: contextpress
     restart: unless-stopped
     volumes:
-      - ./dist:/usr/share/nginx/html:ro
+      - ./dist-webroot:/usr/share/nginx/html:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     expose:
       - "80"                     # only on the npm network, no host port

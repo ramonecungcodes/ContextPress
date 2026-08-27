@@ -1,13 +1,28 @@
 # Deploying ContextPress
 
 The site is a static bundle served by nginx behind Nginx Proxy Manager (NPM),
-fronted by a Cloudflare Tunnel. Because `dist/` is **bind-mounted** into the
-nginx container, publishing new content just means regenerating `dist/` — no
-container restart.
+fronted by Cloudflare, at the apex domain **`ramonecung.com`**. nginx is the
+only thing serving requests in production — there is no application runtime.
+
+Each deploy renders into `./dist`, then **promotes** it into the live webroot
+`./dist-webroot` in place (nginx bind-mounts `./dist-webroot`), so the swap is
+picked up live with **no container restart**. The version being replaced is
+archived to a dated `./dist-webroot-YYYY-MM-DD/` for rollback, and old backups
+are pruned:
+
+```
+./dist/                    fresh build output (overwritten every deploy)
+./dist-webroot/            the live site nginx serves
+./dist-webroot-YYYY-MM-DD/ dated backups of prior live versions (rollback)
+```
+
+A failed build never reaches the webroot: the last good `./dist-webroot` keeps
+serving.
 
 - **First-time server setup** — clone, build, run, wire up NPM + Cloudflare.
 - **Manual deploy** — one command on the box.
 - **Automated deploy** — push to `main`, a Gitea Action SSHes in and deploys.
+- **Rollback** — restore a dated backup, no rebuild.
 
 ---
 
@@ -20,34 +35,34 @@ cd /docker
 git clone https://git.ramonecung.com/ramonecung/ContextPress.git
 cd ContextPress
 
-mkdir -p dist
 docker compose build build        # build the builder image (once)
-docker compose run --rm build     # render ./dist
-docker compose up -d web          # start nginx on the npm network
+./deploy.sh                       # render ./dist, promote to ./dist-webroot, start nginx
 ```
 
-For unattended `git pull`, give the box **read-only** access to the repo — a
-Gitea **deploy token** in the clone URL, or a deploy key.
+`deploy.sh` creates `./dist-webroot` on the first run, so nginx has something to
+serve. For unattended `git pull`, give the box **read-only** access to the repo
+— a Gitea **deploy token** in the clone URL, or a deploy key.
 
 ### NPM proxy host
 
-In the NPM UI, add a Proxy Host:
+In the NPM UI, point the `ramonecung.com` Proxy Host at this container:
 
-- **Domain:** `blog.ramonecung.com`
+- **Domain:** `ramonecung.com`
 - **Scheme** `http` → **Forward Hostname** `contextpress` → **Port** `80`
   (NPM resolves the container by name on the shared `nginx-proxy-manager_default`
   network.)
 - **SSL:** Cloudflare terminates TLS at the edge, so NPM can stay on HTTP here,
   or issue a Let's Encrypt cert via the Cloudflare DNS-01 method.
 
+Cutting the apex over is just repointing that proxy host's upstream to
+`contextpress` (from whatever served `ramonecung.com` before). Rolling back is
+repointing it back.
+
 ### Cloudflare
 
-- If your tunnel already routes `*.ramonecung.com` to NPM, just add a **DNS
-  record** for `blog` (proxied).
-- Otherwise add a tunnel public-hostname route: `blog.ramonecung.com` →
-  `http://<npm-container>:80`.
-
-Then load `https://blog.ramonecung.com` to verify.
+The apex `ramonecung.com` already routes to NPM, so nothing changes at the
+Cloudflare layer — only the NPM upstream above. Then load
+`https://ramonecung.com` to verify.
 
 ---
 
@@ -57,10 +72,25 @@ On the server:
 
 ```bash
 cd /docker/ContextPress
-./deploy.sh        # git pull -> rebuild ./dist -> ensure nginx is up
+./deploy.sh        # git pull -> render ./dist -> promote to ./dist-webroot -> nginx up
 ```
 
-`deploy.sh` uses `git pull --ff-only`, so it never does a surprise merge.
+`deploy.sh` uses `git pull --ff-only` (never a surprise merge), takes a `flock`
+so overlapping runs can't collide, and keeps the newest `KEEP` dated backups
+(default 7; override with `KEEP=N ./deploy.sh`).
+
+## Rollback
+
+Restore a dated backup into the live webroot — no rebuild, picked up live:
+
+```bash
+cd /docker/ContextPress
+ls -1dt dist-webroot-*/            # list backups, newest first
+rsync -a --delete dist-webroot-2026-08-27/ dist-webroot/
+```
+
+For a full revert (back to whatever served the apex before), repoint the
+`ramonecung.com` upstream in NPM instead.
 
 ---
 
