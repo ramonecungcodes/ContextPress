@@ -5,6 +5,9 @@ tags: [systems]
 description: >
   Retrieval sounds simple until real users, latency budgets, and garbage data
   show up. What broke, and how I fixed it.
+featured: true
+image: pipeline.svg
+image_side: right
 ---
 
 Retrieval-augmented generation demos beautifully. You wire an embedding model to

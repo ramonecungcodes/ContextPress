@@ -1,0 +1,25 @@
+# /blog/ — paginated listing of posts.
+# `list: posts` marks this as a blog page; per_page sets how many posts per page
+# (extra posts spill onto /blog/page/2/, /blog/page/3/, ...). Posts are ordered
+# featured-first, then newest-first. Per-post presentation (featured, image,
+# image_side) is set in each post's frontmatter.
+list: posts
+per_page: 8
+title: "Writing"
+description: "Engineering writeups: LLM systems, retrieval, testing strategy, and the operational side of shipping software and automation."
+brand: "ramon@writing: ~"
+prompt: "ls ~/writing"
+intro: "Longer-form writeups on the engineering behind my projects: architecture decisions, retrieval and evaluation, local LLM constraints, and testing strategy."
+
+nav:
+  - { label: "AI", href: "/ai/" }
+  - { label: "RPA", href: "/rpa/" }
+  - { label: "projects", href: "/projects/" }
+  - { label: "blog", href: "/blog/" }
+
+footer_links:
+  - { label: "success@ramonecung.com", href: "mailto:success@ramonecung.com" }
+  - { label: "github", href: "https://github.com/ramonecungcodes" }
+  - { label: "linkedin", href: "https://linkedin.com/in/ramonecung" }
+  - { label: "AI", href: "/ai/" }
+  - { label: "RPA", href: "/rpa/" }
