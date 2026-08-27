@@ -11,9 +11,13 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import functools
 import hashlib
+import http.server
 import re
 import shutil
+import socketserver
+import webbrowser
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from pathlib import Path
@@ -274,6 +278,36 @@ def _rss(site, posts) -> str:
     )
 
 
+def serve(directory: Path, port: int, *, open_browser: bool = True) -> None:
+    """Serve `directory` over HTTP and (optionally) open a browser to it.
+
+    Blocks until interrupted (Ctrl+C). If `port` is taken, tries the next few.
+    """
+    handler = functools.partial(http.server.SimpleHTTPRequestHandler,
+                                directory=str(directory))
+    httpd = None
+    for candidate in range(port, port + 10):
+        try:
+            httpd = socketserver.TCPServer(("", candidate), handler)
+            port = candidate
+            break
+        except OSError:
+            continue
+    if httpd is None:
+        raise SystemExit(f"Could not bind a port in {port}..{port + 9}")
+
+    url = f"http://localhost:{port}/"
+    print(f"Serving {directory} at {url}  (Ctrl+C to stop)")
+    if open_browser:
+        webbrowser.open(url)
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nStopped.")
+    finally:
+        httpd.server_close()
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="Build the ContextPress static site.")
     ap.add_argument("--drafts", action="store_true", help="include draft posts")
@@ -281,21 +315,30 @@ def main() -> None:
     ap.add_argument("--content", default="content", help="content directory")
     ap.add_argument("--themes", default="themes", help="themes directory")
     # base_url override: default is site.yaml's canonical (prod) URL. These pick
-    # the build target from the command instead. --dev is sugar for --base-url "".
-    url = ap.add_mutually_exclusive_group()
-    url.add_argument("--base-url", dest="base_url", default=None,
-                     help="override site.yaml base_url (e.g. a staging domain)")
-    url.add_argument("--dev", dest="base_url", action="store_const", const="",
-                     help='build with relative links (same as --base-url "")')
+    # the build target from the command instead. --dev builds relative and then
+    # serves dist + opens a browser; --base-url "" is the same relative build
+    # without the server (for file:// or zipping).
+    target = ap.add_mutually_exclusive_group()
+    target.add_argument("--base-url", dest="base_url", default=None,
+                        help="override site.yaml base_url (e.g. a staging domain)")
+    target.add_argument("--dev", action="store_true",
+                        help="relative build, then serve dist and open a browser")
+    ap.add_argument("--port", type=int, default=8000,
+                    help="dev server port (default: 8000)")
+    ap.add_argument("--no-open", action="store_true",
+                    help="with --dev, do not open a browser")
     args = ap.parse_args()
 
+    out_dir = ROOT / args.out
     build(
         content_dir=ROOT / args.content,
-        out_dir=ROOT / args.out,
+        out_dir=out_dir,
         themes_dir=ROOT / args.themes,
         drafts=args.drafts,
-        base_url=args.base_url,
+        base_url="" if args.dev else args.base_url,
     )
+    if args.dev:
+        serve(out_dir, args.port, open_browser=not args.no_open)
 
 
 if __name__ == "__main__":

@@ -90,15 +90,20 @@ target when you need one:
 
 ```bash
 python build.py                    # prod (site.yaml base_url)
-python build.py --dev              # relative links, for local preview
+python build.py --dev              # relative build, then serve + open a browser
 python build.py --base-url https://staging.example.com   # any other target
+python build.py --base-url ""      # relative build, no server (file:// / zip)
 ```
 
-`--dev` is sugar for `--base-url ""`. In relative builds internal links are
-rewritten **document-relative** to each page (`/static/x` becomes `../static/x`
-from `/ai/`), and the static cache-buster is dropped, so the raw `dist/` files
-open correctly straight from disk (`file://`, double-click) as well as under any
-subpath, not just a server root.
+In a **relative build** (`--dev` or `--base-url ""`) internal links are rewritten
+**document-relative** to each page (`/static/x` becomes `../static/x` from
+`/ai/`) and the static cache-buster is dropped, so the raw `dist/` files open
+correctly straight from disk (`file://`, double-click) and under any subpath, not
+just a server root.
+
+`--dev` additionally serves `dist/` and opens your browser to it (root redirects
+to `/ai/`). Change the port with `--port 8080`; skip launching the browser with
+`--no-open`. It blocks until Ctrl+C.
 
 ## Add a post
 
