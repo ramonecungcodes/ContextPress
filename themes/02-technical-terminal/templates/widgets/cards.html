@@ -1,5 +1,6 @@
 <section class="section"{% if w.id %} id="{{ w.id }}"{% endif %}>
   {% if w.prompt %}<p class="prompt">{{ w.prompt }}</p>{% endif %}
+  {% if w.intro %}<p class="grid-intro">{{ w.intro }}</p>{% endif %}
   <div class="grid projects">
     {% for c in w['items'] %}
     <div class="card{% if c.feature %} feature{% endif %}">
