@@ -134,6 +134,14 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
             for asset in src_bundle.iterdir():
                 if asset.name in ("index.yaml", "site.yaml"):
                     continue
+                # content/posts is post *source* (rendered to /blog/<slug>/), not
+                # an asset tree to publish verbatim; _/.-prefixed entries (e.g.
+                # posts/_drafts) are private. Skip both — mirrors the raw-HTML
+                # pass's posts/ and _/.-prefixed skips below.
+                if src_bundle == content_dir and asset.name == "posts":
+                    continue
+                if asset.name.startswith((".", "_")):
+                    continue
                 if asset.is_dir():
                     if (asset / "index.yaml").exists():
                         continue  # a nested route owns this directory
