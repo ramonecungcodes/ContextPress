@@ -1,0 +1,182 @@
+# /rpa/ — the UiPath RPA-developer landing page, composed from widgets.
+# Same widgets and theme as /ai/; only the content and section order differ.
+title: "Ramon Eçung · UiPath RPA Developer"
+description: "Ramon Eçung II, Senior UiPath RPA Developer with 9+ years across federal, government, and enterprise environments. UiPath Studio & Orchestrator, REFramework, Document Understanding. Active Secret Clearance. Open to remote."
+og_image: "https://ramonecung.com/og/rpa.png"
+brand: "ramon@rpa-developer: ~"
+
+nav:
+  - { label: "about", href: "#about" }
+  - { label: "experience", href: "#experience" }
+  - { label: "skills", href: "#skills" }
+  - { label: "work", href: "#work" }
+  - { label: "projects", href: "/projects/" }
+  - { label: "blog", href: "/blog/" }
+  - { label: "AI version →", href: "/ai/" }
+
+footer_links:
+  - { label: "success@ramonecung.com", href: "mailto:success@ramonecung.com" }
+  - { label: "github", href: "https://github.com/ramonecungcodes" }
+  - { label: "linkedin", href: "https://linkedin.com/in/ramonecung" }
+  - { label: "projects", href: "/projects/" }
+  - { label: "blog", href: "/blog/" }
+  - { label: "AI version", href: "/ai/" }
+  - { label: "résumé", href: "/ramon-ecung-rpa-resume.html" }
+
+sections:
+  - widget: hero
+    name: "Ramon Eçung II"
+    role: "Senior UiPath RPA Developer · Automation Engineer · Applied AI"
+    lede: >-
+      I design, build, and operate production UiPath automation across federal,
+      local-government, and enterprise environments: the full lifecycle, from
+      process discovery and PDDs to REFramework builds, Orchestrator deployment,
+      and hypercare. 9+ years in software and automation, and I bring modern AI
+      into the mix.
+    badges:
+      - "9+ yrs software & automation"
+      - "UiPath Advanced RPA Developer"
+      - "Active Secret Clearance"
+      - "Open to remote"
+    primary: { label: "See my experience ↓", href: "#experience" }
+    resume:
+      - { label: "HTML", href: "/ramon-ecung-rpa-resume.html" }
+      - { label: "PDF", href: "/Ramon_Ecung_RPA_Developer_Resume.pdf" }
+      - { label: "AI-focused résumé", href: "/ramon-ecung-resume.html" }
+    links:
+      - { label: "email", href: "mailto:success@ramonecung.com" }
+      - { label: "github", href: "https://github.com/ramonecungcodes" }
+      - { label: "linkedin", href: "https://linkedin.com/in/ramonecung" }
+    avatar: { src: "/headshot.jpg", alt: "Ramon Eçung II" }
+
+  - widget: prose
+    id: about
+    prompt: "cat about.md"
+    paragraphs:
+      - >-
+        I'm a Senior UiPath RPA developer with 9+ years in software and
+        automation across federal, local-government, and enterprise
+        environments, 4+ of them hands-on in UiPath Studio and Orchestrator. I
+        own the complete automation lifecycle: process discovery and
+        feasibility, requirements, PDDs and SDDs, development with REFramework
+        patterns, testing and UAT, Orchestrator deployment, monitoring, and
+        hypercare.
+      - >-
+        I build for maintainability and reliability: reusable components,
+        exception handling, automation governance, and Orchestrator queues,
+        triggers, and retry strategies that let unattended bots recover from
+        transient failures. I keep the bot fleet in Git with pull-request
+        reviews and automated tests, because production automation is software.
+      - >-
+        I also build production software and modern AI systems: Python services,
+        local LLMs, retrieval, and Document Understanding. I'm focused on where
+        automation and AI meet: intelligent, document-driven automation. That
+        combination is rare on RPA teams, and it's the work I want to be doing.
+    readmore: { label: "read the full résumé →", href: "/ramon-ecung-rpa-resume.html" }
+
+  - widget: timeline
+    id: experience
+    prompt: "cat experience.log"
+    items:
+      - role: "Senior RPA Consultant"
+        org: "OTOT (embedded, UiPath / US Coast Guard FINCEN)"
+        date: "Oct 2024 – Present"
+        note: "Fully remote · sole RPA developer for the USCG Finance Center on a federal engagement"
+        bullets:
+          - "Own the full RPA lifecycle as sole developer: process discovery, requirements, PDD authoring, development, testing, UAT, deployment, and hypercare for mission-critical automation under USCG security and enterprise deployment requirements."
+          - "Design, develop, and maintain production UiPath automations for 12 legacy-system processes, replacing manual operator workflows across enterprise applications without APIs and reducing manual processing by ~18 hours/week per bot."
+          - "Develop UiPath Document Understanding workflows for ingestion, classification, extraction, and validation (tracked in Jira and USCG SharePoint)."
+          - "Establish REFramework patterns, reusable components, exception handling, and automation governance for the GitLab-managed bot fleet; design Orchestrator queues, triggers, logging, monitoring, and retry strategies for reliable unattended runs."
+      - role: "Automation Developer"
+        org: "Sarasota County Government (CJIS verified)"
+        date: "Dec 2023 – Oct 2024"
+        note: "Hybrid · UiPath architect who stood up the county's RPA practice"
+        bullets:
+          - "Built the county's RPA Center of Excellence as sole architect: automation intake, development standards, reusable frameworks, governance, and repeatable deployment pathways from the ground up."
+          - "Delivered UiPath automations end to end, translating stakeholder requirements into PDDs, SDDs, technical designs, testing, and production deployment."
+          - "Introduced Git-based PR reviews, Kanban backlog management, unit testing, and development best practices; built proactive monitoring that caught failures before user impact."
+      - role: "Software Engineer II / Automation Developer"
+        org: "Cardinal Financial"
+        date: "Jul 2019 – Aug 2023"
+        note: "Fully remote · Python automation and a cloud-native data warehouse"
+        bullets:
+          - "Developed configurable Python and SQL automation for enterprise data workloads on AWS (Step Functions, ECS, Lambda, PostgreSQL) with Jenkins."
+          - "Designed and integrated REST APIs with Flask; implemented pytest and Jenkins CI/CD pipelines with automated testing, version control, and deployment validation on GitHub."
+          - "Built proactive monitoring, troubleshooting, and incident-response that identified failures before user impact and maintained uptime SLAs."
+      - role: "Application Support / RPA Team Lead"
+        org: "UPC Insurance"
+        date: "Sep 2017 – Jul 2019"
+        bullets:
+          - "Drove a new RPA initiative from evaluation through production: self-trained on UiPath, built 8 attended and unattended workflows, and eliminated 20 hours/week of manual application-support and data-processing work; migrated the company phone system using RPA."
+    note: "Certs: UiPath Certified Advanced RPA Developer (2019) · UiPath Certified RPA Associate (2024) · Python Institute PCAP & PCED · B.S. Information Sciences & Technology, Penn State (Dean's List, 3.92 GPA)"
+    readmore: { label: "full experience & detail in résumé →", href: "/ramon-ecung-rpa-resume.html" }
+
+  - widget: writing
+    id: writing
+    prompt: "ls ~/writing"
+    note: "I write up the engineering behind my projects: architecture decisions, reliability patterns, retrieval and Document Understanding, and testing strategy."
+    featured:
+      href: "/blog/document-intelligence-the-model-wasnt-the-hard-part/"
+      image: "https://ramonecung.com/og/document-intelligence-the-model-wasnt-the-hard-part.png"
+      alt: "I Built a Document Intelligence System. The Model Wasn't the Hard Part."
+      eyebrow: "Featured writeup · 33 min read"
+      title: "I Built a Document Intelligence System. The Model Wasn't the Hard Part."
+      excerpt: "A document-extraction system taken from 0.928 to 0.986 by fixing the schema, prompts, evaluation, and validation around the model. Directly relevant to intelligent, document-driven automation."
+    posts:
+      - { title: "From Three Scripts to a Private Media Platform", meta: "15 min", href: "/blog/media-tube-media-platform/" }
+      - { title: "From a Test Suite to a Testing Strategy", meta: "18 min", href: "/blog/media-tube-testing-strategy/" }
+      - { title: "Building a Private, AI-Native Messages Archive", meta: "10 min", href: "/blog/messages-archive/" }
+    cta: { label: "Visit the blog →", href: "/blog/" }
+
+  - widget: skills
+    id: skills
+    prompt: "cat skills.txt"
+    categories:
+      - heading: "UiPath & Enterprise RPA"
+        body: "UiPath Studio, UiPath Orchestrator (queues, assets, credentials, triggers, logging, monitoring), REFramework, attended & unattended bots, reusable components, and enterprise RPA design, development, testing, deployment, and debugging."
+      - heading: "Automation Delivery & Process Engineering"
+        body: "Opportunity & feasibility assessment, process discovery, requirements analysis, process mapping, technical design, implementation planning, UAT, hypercare, production support, and automation governance."
+      - heading: "Document Understanding & AI"
+        body: "UiPath Document Understanding (ingestion, classification, extraction, validation), plus local LLMs, embeddings, semantic search, and MCP tooling: the toolkit for intelligent, document-driven automation."
+      - heading: "Systems Integration, Programming & Data"
+        body: "VB.NET, C#, Python, SQL, Bash; LINQ & DataTable manipulation; REST API integration; SQL Server, PostgreSQL, Excel automation, AWS, and Docker."
+      - heading: "Software Engineering & Delivery"
+        body: "Git & GitLab, CI/CD (Jenkins, GitLab CI), unit & integration testing, code review, performance optimization, backlog refinement, Agile/Scrum, Kanban, and technical documentation."
+      - heading: "Cloud & DevOps"
+        body: "AWS (Lambda, ECS, Step Functions), Docker Compose, Linux, Nginx/reverse proxies, containerized services, and production monitoring & troubleshooting."
+    readmore: { label: "full skills breakdown in résumé →", href: "/ramon-ecung-rpa-resume.html" }
+
+  - widget: cards
+    id: work
+    prompt: "ls ~/side-projects"
+    intro: "Beyond RPA, I build and operate production-grade software and AI systems on my own hardware. For an automation team this is where intelligent automation is heading, and it's the toolkit I bring: durable job systems, document and vision AI, retrieval, and the operational discipline to run it in production."
+    items:
+      - title: "Media Tube: private, self-hosted media platform"
+        sub: "Python · FastAPI · PostgreSQL/pgvector · Docker Compose · durable job workers"
+        feature: true
+        bullets:
+          - "Grew from three scripts into a containerized system with a service boundary and durable background workers (leases, heartbeats, retries): the same reliability patterns that matter for unattended automation."
+          - "AI-assisted tagging, transcription, and vision workflows, each with a human-in-the-loop review queue so the automation stays trustworthy."
+          - "Graduated testing: 133+ test modules, Ruff/Semgrep/ESLint security gates, a schema-aware SQL gate, and Playwright on Chromium and WebKit as a deploy gate."
+        tags: ["durable jobs", "document/vision AI", "testing gates", "Docker"]
+        links:
+          - { label: "Read the writeup", href: "/blog/media-tube-media-platform/" }
+          - { label: "Testing strategy", href: "/blog/media-tube-testing-strategy/" }
+          - { label: "Coverage report", href: "/projects/media-tube/reports/media-tube-test-coverage-report-2026-08-27/" }
+      - title: "Messages Archive: AI-native, private archive"
+        sub: "Python · FastAPI · SQLite · Ollama · MCP · Tailscale"
+        bullets:
+          - "Local natural-language retrieval over a personal archive: Nomic embeddings plus a read-only MCP tool surface, with a visible AI audit trail."
+          - "Model selection as a systems problem on a 32 GB CPU-only host: residency limits, serialized inference, and queued work for predictable behavior."
+        tags: ["local LLM", "MCP", "embeddings"]
+        links:
+          - { label: "Read the writeup", href: "/blog/messages-archive/" }
+      - title: "ContextPress: this site's engine"
+        sub: "Static-site generator · Docker · Python"
+        bullets:
+          - "Python + Jinja2 + markdown generator with typed (Pydantic) config validation."
+          - "Theme & page bundles, content-hash cache-busting, RSS/sitemap/robots generation."
+          - "Bind-mounted output served by pinned Nginx; on-demand builder container, restart-free updates."
+        tags: ["Python", "Jinja2", "Docker"]
+        links:
+          - { label: "GitHub", href: "https://github.com/ramonecungcodes/ContextPress" }
