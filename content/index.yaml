@@ -1,0 +1,6 @@
+# Webroot "/" — redirect the site root to the AI landing page.
+# This index.yaml mirrors the webroot: its location (content/) is the site
+# root, so it generates dist/index.html. A `redirect:` key makes it a
+# meta-refresh redirect and overrides the site.home template.
+redirect: /ai/
+title: Redirecting to AI
