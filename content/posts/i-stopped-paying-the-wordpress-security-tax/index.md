@@ -1,5 +1,5 @@
 ---
-date: 2026-08-27
+date: 2026-08-27 12:00:00
 description: A critical vulnerability in WordPress Core pushed me off WordPress, so I
   replaced it with ContextPress — a small Python static site generator where the whole
   site is Markdown, YAML, templates, and a build step, and merging to main deploys it.
