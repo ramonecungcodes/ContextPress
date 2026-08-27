@@ -1,0 +1,86 @@
+<svg viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg" font-family="'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4fdfc9"/>
+    </marker>
+  </defs>
+
+  <!-- card -->
+  <rect x="0" y="0" width="1200" height="675" rx="16" fill="#14181d"/>
+  <rect x="0.5" y="0.5" width="1199" height="674" rx="16" fill="none" stroke="#262d34"/>
+
+  <!-- terminal top bar -->
+  <path d="M0 16 A16 16 0 0 1 16 0 H1184 A16 16 0 0 1 1200 16 V48 H0 Z" fill="#1a2026"/>
+  <line x1="0" y1="48" x2="1200" y2="48" stroke="#262d34"/>
+  <circle cx="26" cy="24" r="6" fill="#ff5f56"/>
+  <circle cx="48" cy="24" r="6" fill="#ffbd2e"/>
+  <circle cx="70" cy="24" r="6" fill="#27c93f"/>
+  <text x="100" y="29" font-size="14" fill="#6f6d66">~/ramonecung.com — dynamic application → static files</text>
+
+  <!-- column headers -->
+  <text x="60"  y="96" font-size="15" letter-spacing="2" fill="#8b8880">BEFORE · WORDPRESS</text>
+  <text x="670" y="96" font-size="15" letter-spacing="2" fill="#8b8880">AFTER · CONTEXTPRESS</text>
+
+  <!-- ===== LEFT COLUMN: dynamic stack ===== -->
+  <!-- browser -->
+  <rect x="60" y="120" width="470" height="52" rx="10" fill="#1b2127" stroke="#2c353d"/>
+  <rect x="60" y="120" width="5" height="52" rx="2.5" fill="#8b8880"/>
+  <text x="84" y="152" font-size="18" fill="#e6e3da">browser</text>
+  <!-- nginx -->
+  <rect x="60" y="186" width="470" height="52" rx="10" fill="#1b2127" stroke="#2c353d"/>
+  <rect x="60" y="186" width="5" height="52" rx="2.5" fill="#8b8880"/>
+  <text x="84" y="218" font-size="18" fill="#e6e3da">nginx</text>
+  <!-- PHP app -->
+  <rect x="60" y="252" width="470" height="52" rx="10" fill="#241f16" stroke="#f5b544"/>
+  <rect x="60" y="252" width="5" height="52" rx="2.5" fill="#f5b544"/>
+  <text x="84" y="284" font-size="18" fill="#f3d9a6">PHP application</text>
+  <!-- MySQL -->
+  <rect x="60" y="318" width="470" height="52" rx="10" fill="#241f16" stroke="#f5b544"/>
+  <rect x="60" y="318" width="5" height="52" rx="2.5" fill="#f5b544"/>
+  <text x="84" y="350" font-size="18" fill="#f3d9a6">MySQL database</text>
+  <!-- wp-admin -->
+  <rect x="60" y="384" width="470" height="52" rx="10" fill="#251617" stroke="#ff5f56"/>
+  <rect x="60" y="384" width="5" height="52" rx="2.5" fill="#ff5f56"/>
+  <text x="84" y="416" font-size="18" fill="#ffd0cd">wp-admin · public login</text>
+  <!-- plugins -->
+  <rect x="60" y="450" width="470" height="52" rx="10" fill="#251617" stroke="#ff5f56"/>
+  <rect x="60" y="450" width="5" height="52" rx="2.5" fill="#ff5f56"/>
+  <text x="84" y="482" font-size="18" fill="#ffd0cd">plugins · running code</text>
+
+  <!-- CVE banner -->
+  <rect x="60" y="522" width="470" height="46" rx="10" fill="#2a1315" stroke="#ff5f56"/>
+  <text x="84" y="551" font-size="17" fill="#ff8a82">⚠  vulnerability in WordPress Core</text>
+  <!-- caption -->
+  <text x="60" y="600" font-size="14" fill="#6f6d66">large, internet-facing attack surface — always executing</text>
+
+  <!-- ===== ARROW ===== -->
+  <text x="600" y="228" font-size="13" fill="#4fdfc9" text-anchor="middle">python build.py</text>
+  <line x1="548" y1="252" x2="652" y2="252" stroke="#4fdfc9" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="600" y="278" font-size="12" fill="#6f6d66" text-anchor="middle">ahead of time</text>
+
+  <!-- ===== RIGHT COLUMN: static ===== -->
+  <!-- browser -->
+  <rect x="670" y="120" width="470" height="52" rx="10" fill="#1b2127" stroke="#2c353d"/>
+  <rect x="670" y="120" width="5" height="52" rx="2.5" fill="#8b8880"/>
+  <text x="694" y="152" font-size="18" fill="#e6e3da">browser</text>
+  <!-- nginx -->
+  <rect x="670" y="186" width="470" height="52" rx="10" fill="#1b2127" stroke="#2c353d"/>
+  <rect x="670" y="186" width="5" height="52" rx="2.5" fill="#8b8880"/>
+  <text x="694" y="218" font-size="18" fill="#e6e3da">nginx · serves files</text>
+  <!-- static files -->
+  <rect x="670" y="252" width="470" height="52" rx="10" fill="#122320" stroke="#4fdfc9"/>
+  <rect x="670" y="252" width="5" height="52" rx="2.5" fill="#4fdfc9"/>
+  <text x="694" y="284" font-size="18" fill="#bff3ea">static files — dist/</text>
+
+  <!-- no-runtime shield card -->
+  <rect x="670" y="336" width="470" height="160" rx="12" fill="#101a19" stroke="#2b3b38"/>
+  <path d="M718 372 l22 -8 l22 8 v22 c0 18 -12 30 -22 34 c-10 -4 -22 -16 -22 -34 z"
+        fill="none" stroke="#46d97e" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M729 396 l8 8 l16 -18" fill="none" stroke="#46d97e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="772" y="388" font-size="19" fill="#d7f5e2">no runtime in production</text>
+  <text x="772" y="416" font-size="15" fill="#7fae90">no PHP · no database · no login</text>
+  <text x="718" y="466" font-size="14" fill="#6f6d66">the site is just generated files</text>
+
+  <!-- caption -->
+  <text x="670" y="540" font-size="15" fill="#4fdfc9">“you cannot SQL-inject a folder.”</text>
+</svg>
