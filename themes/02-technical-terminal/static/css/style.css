@@ -168,7 +168,7 @@ header.site {
 /* Prose (rendered markdown) */
 .prose { font-size: 17px; line-height: 1.8; color: var(--ink); overflow-wrap: break-word; }
 .prose > *:first-child { margin-top: 0; }
-.prose h2 { font-size: 24px; margin: 44px 0 14px; letter-spacing: -.01em; }
+.prose h2 { font-size: 24px; margin: 44px 0 14px; letter-spacing: -.01em; clear: both; }
 .prose h3 { font-size: 20px; margin: 32px 0 10px; }
 .prose h2 a, .prose h3 a { color: inherit; }
 .prose p { margin: 0 0 20px; }
@@ -209,8 +209,21 @@ header.site {
   text-align: center; font-style: italic;
 }
 .prose .mermaid {
-  margin: 30px 0; text-align: center; overflow-x: auto;
+  margin: 30px 0; text-align: center; overflow-x: auto; clear: both;
   border: 1px solid var(--line); border-radius: 10px; padding: 18px; background: var(--panel);
+}
+
+/* Figures that body text wraps around. .fig-right / .fig-left float on wide
+   screens; both collapse to full width on phones. They reuse .post-figure so
+   they keep the framed image + centered caption styling. */
+.prose .fig-right, .prose .fig-left { width: 46%; margin-top: 6px; margin-bottom: 18px; }
+.prose .fig-right { float: right; margin-left: 30px; }
+.prose .fig-left  { float: left;  margin-right: 30px; }
+.prose .fig-right img, .prose .fig-left img { width: 100%; }
+@media (max-width: 640px) {
+  .prose .fig-right, .prose .fig-left {
+    float: none; width: 100%; margin-left: 0; margin-right: 0; margin: 24px 0;
+  }
 }
 
 .site-footer {
