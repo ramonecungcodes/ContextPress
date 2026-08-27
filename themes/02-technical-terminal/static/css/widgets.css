@@ -56,6 +56,12 @@ a:hover { text-decoration: underline; }
 .grid-note { margin-top: 22px; font-size: 13px; color: var(--muted); }
 .grid-intro { max-width: 730px; margin-bottom: 24px; font-size: 14px; color: var(--muted); }
 
+/* GitHub contribution grid (ghchart) */
+.contributions .ghchart-link { display: block; }
+.contributions .ghchart { display: block; width: 100%; max-width: 100%;
+  border: 1px solid var(--border); border-radius: 12px; padding: 18px;
+  background: var(--panel); }
+
 /* hero */
 .hero { padding: 72px 0 60px; display: flex; gap: 40px; align-items: center; }
 .hero-text { flex: 1; min-width: 0; }

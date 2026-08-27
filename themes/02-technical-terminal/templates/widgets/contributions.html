@@ -1,0 +1,11 @@
+{# GitHub contribution grid via ghchart.rshah.org (a third-party SVG service).
+   w.username is required; w.color (hex, no #) tints it; w.href links the image;
+   w.prompt / w.caption are optional labels. #}
+<section class="section contributions"{% if w.id %} id="{{ w.id }}"{% endif %}>
+  {% if w.prompt %}<p class="prompt">{{ w.prompt }}</p>{% endif %}
+  {% set src = "https://ghchart.rshah.org/" ~ ((w.color ~ "/") if w.color else "") ~ w.username %}
+  {% if w.href %}<a class="ghchart-link" href="{{ w.href }}"{% if w.href.startswith('http') %} target="_blank" rel="noopener"{% endif %}>{% endif %}
+  <img class="ghchart" src="{{ src }}" alt="{{ w.alt or (w.username ~ ' GitHub contribution graph') }}" loading="lazy" />
+  {% if w.href %}</a>{% endif %}
+  {% if w.caption %}<p class="grid-note">{{ w.caption }}</p>{% endif %}
+</section>
