@@ -1,5 +1,5 @@
 ---
-date: 2026-08-27
+date: 2026-08-27 18:00:00
 description: Phases 3 and 4 of building an intelligent document processing system —
   classification, document splitting, and validation, and everything that broke once
   I stopped handing the pipeline the answer key.
