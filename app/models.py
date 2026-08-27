@@ -42,6 +42,18 @@ class SiteConfig(BaseModel):
     robots: Robots = Field(default_factory=Robots)
 
 
+class RedirectPage(BaseModel):
+    """A page whose only job is to send the browser somewhere else.
+
+    Declared by an `index.yaml` in the content tree with a `redirect:` key.
+    The file's location mirrors the webroot, so content/index.yaml -> "/" and
+    content/old/index.yaml -> "/old/". Rendered to a static meta-refresh page.
+    """
+    redirect: str                 # target URL or path, e.g. "/ai/"
+    title: str = "Redirecting"    # link text on the fallback page
+    route: str = ""               # source route, filled in by the loader ("/", "/old/")
+
+
 class Post(BaseModel):
     slug: str
     title: str

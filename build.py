@@ -21,7 +21,7 @@ from xml.sax.saxutils import escape
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from jinja2.exceptions import TemplateNotFound
 
-from app.content import load_posts, load_site, pygments_css
+from app.content import load_pages, load_posts, load_site, pygments_css
 
 ROOT = Path(__file__).parent
 
@@ -41,6 +41,7 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
         )
 
     posts = load_posts(content_dir, include_drafts=drafts)
+    pages = load_pages(content_dir)
 
     env = Environment(
         loader=FileSystemLoader(str(templates_dir)),
@@ -79,17 +80,35 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
 
     env.globals["static_url"] = static_url
 
-    # home page ("/"): the template named by site.home ("index" or "coming-soon")
-    try:
-        home_tmpl = env.get_template(f"{site.home}.html")
-    except TemplateNotFound:
-        raise SystemExit(
-            f"home '{site.home}' has no template: expected "
-            f"{templates_dir / (site.home + '.html')}"
+    # webroot-mirroring pages (currently: redirects). A page at "/" overrides
+    # the home template below, so an index.yaml redirect wins over site.home.
+    redirect_tmpl = env.get_template("redirect.html")
+    base = site.base_url.rstrip("/")
+    routes = {p.route for p in pages}
+    for page in pages:
+        target = page.redirect
+        canonical = base + target if base and target.startswith("/") else target
+        dest = out_dir / _route_to_index(page.route)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(
+            redirect_tmpl.render(site=site, page=page, target=target,
+                                 canonical=canonical),
+            encoding="utf-8",
         )
-    (out_dir / "index.html").write_text(
-        home_tmpl.render(site=site, posts=posts), encoding="utf-8"
-    )
+
+    # home page ("/"): the template named by site.home ("index" or "coming-soon"),
+    # unless a redirect page already claimed "/".
+    if "/" not in routes:
+        try:
+            home_tmpl = env.get_template(f"{site.home}.html")
+        except TemplateNotFound:
+            raise SystemExit(
+                f"home '{site.home}' has no template: expected "
+                f"{templates_dir / (site.home + '.html')}"
+            )
+        (out_dir / "index.html").write_text(
+            home_tmpl.render(site=site, posts=posts), encoding="utf-8"
+        )
 
     # posts
     post_tmpl = env.get_template("post.html")
@@ -120,8 +139,17 @@ def build(content_dir: Path, out_dir: Path, themes_dir: Path,
     if site.robots.sitemap:
         (out_dir / "sitemap.xml").write_text(_sitemap(site, posts), encoding="utf-8")
 
-    print(f"Built {len(posts)} post(s) -> {out_dir}  (home={site.home}, "
+    home_desc = "redirect" if "/" in routes else site.home
+    print(f"Built {len(posts)} post(s), {len(pages)} redirect(s) -> {out_dir}  "
+          f"(home={home_desc}, "
           f"crawlers={'allowed' if site.robots.allow else 'blocked'})")
+
+
+def _route_to_index(route: str) -> Path:
+    """Map a route to its static output path: "/" -> index.html,
+    "/ai/" -> ai/index.html."""
+    parts = [p for p in route.strip("/").split("/") if p]
+    return Path(*parts, "index.html") if parts else Path("index.html")
 
 
 def _robots(site) -> str:

@@ -22,7 +22,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.util import ClassNotFound
 
-from .models import Post, SiteConfig
+from .models import Post, RedirectPage, SiteConfig
 
 WORDS_PER_MINUTE = 200
 
@@ -87,6 +87,39 @@ def load_site(content_dir: Path) -> SiteConfig:
     return site
 
 
+def load_pages(content_dir: Path) -> list[RedirectPage]:
+    """Load webroot-mirroring page definitions (`index.yaml` files).
+
+    The content tree mirrors the webroot: every directory that holds an
+    `index.yaml` produces that directory's `index.html`. content/index.yaml is
+    the site root ("/"), content/ai/index.yaml is "/ai/", and so on.
+
+    Today the only page kind is a redirect (an `index.yaml` with a `redirect:`
+    key). posts/ owns its own generation (via index.md bundles) and is skipped,
+    as are `_`/`.`-prefixed paths (drafts, dotfiles). An index.yaml without a
+    `redirect:` key is an error, so an unsupported page kind fails loudly rather
+    than shipping nothing.
+    """
+    pages: list[RedirectPage] = []
+    for path in sorted(content_dir.rglob("index.yaml")):
+        rel = path.relative_to(content_dir)
+        if rel.parts[0] == "posts" or any(
+            part.startswith((".", "_")) for part in rel.parts
+        ):
+            continue
+        raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if "redirect" not in raw:
+            raise SystemExit(
+                f"{path}: page has no 'redirect:' key (the only supported "
+                f"page kind); nothing to generate"
+            )
+        route = "/" + "/".join(rel.parts[:-1])
+        if not route.endswith("/"):
+            route += "/"
+        pages.append(RedirectPage(route=route, **raw))
+    return pages
+
+
 def _scan_posts(directory: Path):
     """Yield (slug, markdown_path) for both post layouts in one directory:
 
@@ -114,6 +147,8 @@ def _iter_post_sources(posts_dir: Path, *, include_drafts: bool = False):
     and is invisible to normal builds. `build.py --drafts` pulls it in so you
     can preview work-in-progress locally.
     """
+    if not posts_dir.is_dir():
+        return  # a site can have no posts yet
     yield from _scan_posts(posts_dir)
     if include_drafts:
         drafts_dir = posts_dir / "_drafts"
