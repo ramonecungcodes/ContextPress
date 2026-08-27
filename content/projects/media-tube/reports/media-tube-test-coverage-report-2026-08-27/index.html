@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media Tube coverage report (2026-08-27) · Ramon Eçung</title>
+<meta name="description" content="Media Tube test coverage survey for 2026-08-27: 79% overall across 13,235 statements, 101 modules, up from 62% on 2026-08-21. Findings, known gaps, and the full module breakdown.">
+<link rel="icon" href="/static/favicon/favicon.ico" sizes="any">
+<link rel="icon" href="/static/favicon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/favicon/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Media Tube coverage report (2026-08-27)">
+<meta property="og:description" content="79% overall across 13,235 statements, up from 62% on 2026-08-21.">
+<meta property="og:url" content="https://ramonecung.com/projects/media-tube/reports/media-tube-test-coverage-report-2026-08-27/">
+<meta property="og:image" content="https://ramonecung.com/blog/coverage-over-time.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ramonecung.com/blog/coverage-over-time.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --bg:oklch(0.97 0.005 90); --panel:oklch(1 0 0); --panel2:oklch(0.95 0.005 90);
+  --border:oklch(0.85 0.01 90); --text:oklch(0.25 0.01 255); --muted:oklch(0.5 0.01 90);
+  --accent:oklch(0.5 0.14 175); --accent-soft:oklch(0.5 0.14 175 / 0.12); --warn:oklch(0.55 0.16 35); }
+:root[data-theme="dark"] { --bg:oklch(0.15 0.012 255); --panel:oklch(0.17 0.012 255); --panel2:oklch(0.2 0.012 255);
+  --border:oklch(0.32 0.012 255 / 0.6); --text:oklch(0.88 0.01 90); --muted:oklch(0.62 0.02 90);
+  --accent:oklch(0.82 0.14 175); --accent-soft:oklch(0.82 0.14 175 / 0.14); --warn:oklch(0.72 0.17 35); }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace; background:var(--bg); color:var(--text); line-height:1.65; -webkit-font-smoothing:antialiased; }
+a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
+.wrap { max-width:880px; margin:0 auto; padding:0 24px; }
+.topbar { position:sticky; top:0; z-index:50; background:color-mix(in oklch, var(--bg) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); }
+.topbar .wrap { display:flex; align-items:center; gap:18px; height:56px; }
+.brand { color:var(--muted); font-size:13px; } .brand b { color:var(--accent); }
+.nav { display:flex; gap:18px; margin-left:auto; font-size:13px; } .nav a { color:var(--muted); }
+.toggle { background:var(--panel2); border:1px solid var(--border); color:var(--muted); font:inherit; font-size:12px; cursor:pointer; padding:5px 10px; border-radius:6px; }
+main { padding-bottom:70px; }
+.crumbs { font-size:13px; margin:26px 0 0; }
+.intro { padding:30px 0 6px; }
+.intro h2 { font-size:14px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+.intro p { color:var(--muted); font-size:14.5px; max-width:720px; }
+.cmd { color:var(--muted); font-size:13px; margin:34px 0 8px; } .cmd::before { content:"$ "; color:var(--accent); }
+.seclabel { font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin:38px 0 4px; }
+h1 { font-size:30px; letter-spacing:-1px; margin:2px 0 14px; }
+.survey { color:var(--muted); font-size:14.5px; max-width:760px; margin-bottom:8px; }
+.survey b { color:var(--text); }
+.statline { color:var(--text); font-size:15px; margin:16px 0; max-width:760px; } .statline b { color:var(--accent); }
+.metarow { display:flex; gap:26px; flex-wrap:wrap; color:var(--muted); font-size:13px; margin-bottom:8px; } .metarow b { color:var(--text); }
+.tiles { display:grid; grid-template-columns:1.2fr 1fr 1fr 1fr; gap:14px; margin:22px 0 6px; }
+.tile { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px 18px; }
+.tile .k { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
+.tile .v { font-size:34px; font-weight:700; color:var(--accent); letter-spacing:-1px; margin-top:6px; }
+.tile .s { font-size:12px; color:var(--muted); margin-top:4px; }
+.mcard { background:var(--panel); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:10px; padding:16px 18px; margin:14px 0; }
+.mhead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.mname { font-size:15px; font-weight:600; color:var(--text); }
+.mpct { font-size:18px; font-weight:700; color:var(--accent); }
+.mprose { font-size:13.5px; color:var(--muted); margin:8px 0 6px; }
+.mmeta { font-size:12px; color:var(--muted); }
+.subhead { font-size:15px; font-weight:600; margin:34px 0 2px; } .subhead .c { color:var(--muted); font-weight:400; font-size:13px; }
+.wins { list-style:none; padding:0; margin:12px 0; }
+.wins li { background:var(--panel); border:1px solid var(--border); border-radius:9px; padding:11px 15px; margin-bottom:9px; font-size:13.5px; color:var(--muted); }
+.wins b { color:var(--accent); }
+.breakdown { margin-top:14px; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+.brow { display:grid; grid-template-columns:1fr auto 52px; gap:14px; align-items:center; padding:7px 16px; border-bottom:1px solid var(--border); font-size:12.5px; }
+.brow:last-child { border-bottom:none; }
+.bname { color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bbar { font-size:13px; letter-spacing:1px; white-space:nowrap; }
+.bf { color:var(--accent); } .be { color:var(--border); }
+.bpct { text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; }
+footer.wrap { border-top:1px solid var(--border); padding-top:26px; padding-bottom:120px; color:var(--muted); font-size:13px; }
+@media (max-width:680px) { .tiles { grid-template-columns:1fr 1fr; } .nav { display:none; } .bbar { display:none; } .brow { grid-template-columns:1fr 52px; } }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <span class="brand"><b>ramon@ai-engineer</b>: ~/media-tube &middot; coverage</span>
+  <nav class="nav"><a href="/projects/media-tube/">project</a><a href="/blog/">blog</a><a href="/ai/">home</a></nav>
+  <button class="toggle" id="themeToggle" style="margin-left:auto;">theme: dark</button>
+</div></header>
+<main class="wrap">
+  <p class="crumbs"><a href="/projects/media-tube/">&larr; media-tube</a></p>
+  <section class="intro">
+    <h2>What media-tube is</h2>
+    <p>media-tube is a self-hosted library for a large video and photo collection, a private, multi-user alternative to handing your media to a cloud service. It is a Python application split into a server-rendered web dashboard and a separate HTTP API, with a custom player, keyword and semantic search, and a background-job system for the slow work. The AI layer is what makes it more than a file browser: automatic tagging from a vision model, Whisper transcription and translation, face and actor recognition, and embedding-based similarity, each with a human-in-the-loop review queue so the automation stays trustworthy. The survey below breaks down what that codebase's test suite actually covers.</p>
+  </section>
+  <p class="cmd">./tests/run.sh --coverage</p>
+  <p class="seclabel">Coverage survey</p>
+  <h1>What the media-tube suite actually watches</h1>
+  <p class="survey">Data as of <b>2026-08-27</b>. The migration the last survey set out, pulling business logic out of the web/presentation layer (dashboard/*) into the API where it is unit-testable, has largely landed: the <b>api/media_tube_api</b> package is now built out and tested, and overall coverage moved from <b>62%</b> to <b>79%</b>. The remaining gaps are concentrated in the web dispatch layer and a few dashboard orchestration modules.</p>
+  <p class="statline"><b>79%</b> of <b>13,235</b> statements, measured from a real run, not carried forward from a stale number. A one-line coverage percentage says nothing about which 21% is missing; this is that breakdown, module by module, with what is worth doing about it.</p>
+  <div class="metarow"><span><b>13,235</b> statements</span><span><b>2,450</b> uncovered</span><span><b>101</b> modules measured</span><span>2026-08-27 &middot; ./tests/run.sh</span></div>
+  <div class="tiles">
+    <div class="tile"><div class="k">Overall</div><div class="v">79%</div><div class="s">13,235 statements across web + api &middot; was 62%</div></div>
+    <div class="tile"><div class="k">Fully covered</div><div class="v">10</div><div class="s">modules at 100% (was 13)</div></div>
+    <div class="tile"><div class="k">&ge;80% covered</div><div class="v">75</div><div class="s">of 101 modules (was 27/53)</div></div>
+    <div class="tile"><div class="k">&lt;50% covered</div><div class="v">3</div><div class="s">where the gaps concentrate (was 13)</div></div>
+  </div>
+
+  <p class="seclabel">Findings</p>
+  
+    <div class="mcard">
+      <div class="mhead"><span class="mname">services/web/app.py</span><span class="mpct">56%</span></div>
+      <p class="mprose">Still the single largest gap by raw uncovered lines. app.py is the HTTP dispatch table, the layer that decides which function answers which route. Every other module's logic is unit-tested by calling its functions directly, which proves the logic works but not that each route is wired to it correctly. It has climbed from 48% as more endpoints route through the real client fixture; the remaining lines are endpoints still tested by calling their handler directly. Fixed the same way: route each through conftest's app_server / client fixtures, which already exist.</p>
+      <div class="mmeta">793 stmts &middot; 351 uncovered</div>
+    </div>
+
+  <p class="seclabel">Known gaps I'm actively closing</p>
+  
+    <div class="mcard">
+      <div class="mhead"><span class="mname">web/dashboard/ai.py</span><span class="mpct">50%</span></div>
+      <p class="mprose">Tag consolidation, canonical groups, alias resolution, the handoff-prompt builder. Still the largest logic gap after app.py. It shrank from 893 statements as pieces moved to the API, but the consolidation core still lives here and is only half-exercised.</p>
+      <div class="mmeta">613 stmts &middot; 286 uncovered</div>
+    </div>
+    <div class="mcard">
+      <div class="mhead"><span class="mname">web/dashboard/__init__.py</span><span class="mpct">63%</span></div>
+      <p class="mprose">The dashboard package itself: shared context, helpers and wiring that every handler imports. A large surface that grew as logic consolidated during the migration. The win is pulling the reusable pieces into named modules so they can be tested in isolation.</p>
+      <div class="mmeta">715 stmts &middot; 237 uncovered</div>
+    </div>
+    <div class="mcard">
+      <div class="mhead"><span class="mname">web/dashboard/settings.py</span><span class="mpct">59%</span></div>
+      <p class="mprose">Part inline JS (fairly exempt), part real logic: dismiss/hide state and the home-display config round trip. Worth separating the two before adding anything new.</p>
+      <div class="mmeta">340 stmts &middot; 123 uncovered</div>
+    </div>
+    <div class="mcard">
+      <div class="mhead"><span class="mname">web/dashboard/reaper.py</span><span class="mpct">56%</span></div>
+      <p class="mprose">Its whole safety story is one guard: refuse to delete when the live list looks suspiciously short. Whether that guard actually fires still is not proven by this number.</p>
+      <div class="mmeta">141 stmts &middot; 62 uncovered</div>
+    </div>
+    <div class="mcard">
+      <div class="mhead"><span class="mname">web/dashboard/import_organizer_rules.py</span><span class="mpct">0%</span></div>
+      <p class="mprose">Newly added and not yet under test. Import-organization rules are pure, table-driven logic, exactly the kind that should be unit-tested directly. This is the next one to pick up.</p>
+      <div class="mmeta">67 stmts &middot; 67 uncovered</div>
+    </div>
+    <div class="mcard">
+      <div class="mhead"><span class="mname">api/auth/webauthn_ceremony.py</span><span class="mpct">53%</span></div>
+      <p class="mprose">The passkey registration and authentication ceremony. The happy path is covered; the error, timeout and replay branches, the ones that matter most for auth, are the uncovered half.</p>
+      <div class="mmeta">122 stmts &middot; 53 uncovered</div>
+    </div>
+    <div class="mcard">
+      <div class="mhead"><span class="mname">web/dashboard/autotag.py</span><span class="mpct">16%</span></div>
+      <p class="mprose">Once the largest gap in the app (463 statements at 11%); the structured-tagging logic moved into api/autotag (now 77 to 95%). What remains here is a thin orchestration shim that is not exercised yet.</p>
+      <div class="mmeta">98 stmts &middot; 78 uncovered</div>
+    </div>
+
+  <p class="seclabel">Since 2026-08-21</p>
+  <ul class="wins"><li><b>dashboard/watch.py</b> 42% &rarr; 80% — the custom player and the highest-traffic resume/view/favorite APIs, now covered.</li><li><b>dashboard/actors.py</b> 46% &rarr; 93% — the actor merge/rename path whose silent mis-merges were the cross-cutting corruption risk called out last time.</li><li><b>dashboard/faces.py</b> 57% &rarr; 85% — everything outside the model/codec exclusions.</li><li><b>autotag &amp; transcription</b> orchestration migrated out of the web layer into the API (api/autotag, api/tagging, api/transcription), now 77 to 95%.</li><li><b>the api/media_tube_api package</b> built out and unit-tested end to end, sitting at 80 to 100% across most of its modules.</li></ul>
+
+  <p class="seclabel">Already accounted for</p>
+  
+    <div class="mcard">
+      <div class="mhead"><span class="mname">web/dashboard/faces.py</span><span class="mpct">85%</span></div>
+      <p class="mprose">Recognition quality and real ffmpeg decoding are properties of a model and a codec, not this code, and are excluded by design. The rest is testable and now largely covered, up from 57% on the last survey.</p>
+      <div class="mmeta">625 stmts &middot; 80 uncovered</div>
+    </div>
+    <div class="mcard">
+      <div class="mhead"><span class="mname">web/dashboard/previews.py</span><span class="mpct">66%</span></div>
+      <p class="mprose">Whether a hover clip looks good is a perceptual judgement, excluded on purpose. Source selection, safe paths and command construction are covered.</p>
+      <div class="mmeta">91 stmts &middot; 29 uncovered</div>
+    </div>
+    <div class="mcard">
+      <div class="mhead"><span class="mname">web/dashboard/embeddings.py</span><span class="mpct">67%</span></div>
+      <p class="mprose">Semantic search's move onto the API is deferred to a written v2 search plan (IDEAS.md): mid-migration, not neglected.</p>
+      <div class="mmeta">79 stmts &middot; 23 uncovered</div>
+    </div>
+
+  <p class="seclabel">Module breakdown</p>
+  <p class="survey">All 101 measured modules, lowest coverage first.</p>
+  <div class="breakdown"><div class="brow"><span class="bname">web/dashboard/import_organizer_rules.py</span><span class="bbar"><span style="color:oklch(0.6 0.19 25);">░░░░░░░░░░░░░░░░░░░░</span></span><span class="bpct">0%</span></div><div class="brow"><span class="bname">web/dashboard/autotag.py</span><span class="bbar"><span style="color:oklch(0.6 0.19 25);">███░░░░░░░░░░░░░░░░░</span></span><span class="bpct">16%</span></div><div class="brow"><span class="bname">web/dashboard/transcription.py</span><span class="bbar"><span style="color:oklch(0.6 0.19 25);">███████░░░░░░░░░░░░░</span></span><span class="bpct">37%</span></div><div class="brow"><span class="bname">web/dashboard/ai.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">██████████░░░░░░░░░░</span></span><span class="bpct">50%</span></div><div class="brow"><span class="bname">api/auth/webauthn_ceremony.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">███████████░░░░░░░░░</span></span><span class="bpct">53%</span></div><div class="brow"><span class="bname">api/ai/router.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">███████████░░░░░░░░░</span></span><span class="bpct">55%</span></div><div class="brow"><span class="bname">web/dashboard/reaper.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">███████████░░░░░░░░░</span></span><span class="bpct">56%</span></div><div class="brow"><span class="bname">web/app.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">███████████░░░░░░░░░</span></span><span class="bpct">56%</span></div><div class="brow"><span class="bname">web/dashboard/settings.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">████████████░░░░░░░░</span></span><span class="bpct">59%</span></div><div class="brow"><span class="bname">api/auth/events.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">████████████░░░░░░░░</span></span><span class="bpct">60%</span></div><div class="brow"><span class="bname">web/dashboard/jobs_stats.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">████████████░░░░░░░░</span></span><span class="bpct">62%</span></div><div class="brow"><span class="bname">web/dashboard/__init__.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">█████████████░░░░░░░</span></span><span class="bpct">63%</span></div><div class="brow"><span class="bname">api/auth/bootstrap.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">█████████████░░░░░░░</span></span><span class="bpct">65%</span></div><div class="brow"><span class="bname">api/home/router.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">█████████████░░░░░░░</span></span><span class="bpct">65%</span></div><div class="brow"><span class="bname">api/playlists/store.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">█████████████░░░░░░░</span></span><span class="bpct">66%</span></div><div class="brow"><span class="bname">web/dashboard/previews.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">█████████████░░░░░░░</span></span><span class="bpct">66%</span></div><div class="brow"><span class="bname">web/dashboard/embeddings.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">█████████████░░░░░░░</span></span><span class="bpct">67%</span></div><div class="brow"><span class="bname">api/auth/authz.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">██████████████░░░░░░</span></span><span class="bpct">70%</span></div><div class="brow"><span class="bname">web/dashboard/playlists.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">██████████████░░░░░░</span></span><span class="bpct">70%</span></div><div class="brow"><span class="bname">web/dashboard/labelpool.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">███████████████░░░░░</span></span><span class="bpct">74%</span></div><div class="brow"><span class="bname">api/auth/router.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">███████████████░░░░░</span></span><span class="bpct">74%</span></div><div class="brow"><span class="bname">api/autotag/router.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">███████████████░░░░░</span></span><span class="bpct">77%</span></div><div class="brow"><span class="bname">web/dashboard/albums.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">████████████████░░░░</span></span><span class="bpct">78%</span></div><div class="brow"><span class="bname">web/dashboard/labelapp.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">████████████████░░░░</span></span><span class="bpct">78%</span></div><div class="brow"><span class="bname">api/tags/router.py</span><span class="bbar"><span style="color:oklch(0.75 0.13 80);">████████████████░░░░</span></span><span class="bpct">78%</span></div><div class="brow"><span class="bname">web/dashboard/watch.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████░░░░</span></span><span class="bpct">80%</span></div><div class="brow"><span class="bname">web/dashboard/jobs.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████░░░░</span></span><span class="bpct">80%</span></div><div class="brow"><span class="bname">web/dashboard/deletions.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████░░░░</span></span><span class="bpct">81%</span></div><div class="brow"><span class="bname">api/ai/client.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████░░░░</span></span><span class="bpct">81%</span></div><div class="brow"><span class="bname">api/db.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████░░░░</span></span><span class="bpct">81%</span></div><div class="brow"><span class="bname">web/dashboard/labeler.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████░░░░</span></span><span class="bpct">81%</span></div><div class="brow"><span class="bname">api/profiles/naming.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████░░░░</span></span><span class="bpct">82%</span></div><div class="brow"><span class="bname">api/tagging/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████░░░░</span></span><span class="bpct">82%</span></div><div class="brow"><span class="bname">web/dashboard/browse.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████░░░░</span></span><span class="bpct">82%</span></div><div class="brow"><span class="bname">web/dashboard/dedupe.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">83%</span></div><div class="brow"><span class="bname">api/profiles/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">83%</span></div><div class="brow"><span class="bname">api/videos/sources.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">84%</span></div><div class="brow"><span class="bname">api/auth/config.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">85%</span></div><div class="brow"><span class="bname">api/videos/related_router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">85%</span></div><div class="brow"><span class="bname">api/search/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">85%</span></div><div class="brow"><span class="bname">api/tagging/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">85%</span></div><div class="brow"><span class="bname">web/dashboard/faces.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">85%</span></div><div class="brow"><span class="bname">web/dashboard/favorites.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">85%</span></div><div class="brow"><span class="bname">api/embeddings/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">85%</span></div><div class="brow"><span class="bname">api/profiles/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">█████████████████░░░</span></span><span class="bpct">87%</span></div><div class="brow"><span class="bname">api/videos/watch_router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">88%</span></div><div class="brow"><span class="bname">api/library/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">88%</span></div><div class="brow"><span class="bname">api/faces/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">88%</span></div><div class="brow"><span class="bname">web/dashboard/job_catalog.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">88%</span></div><div class="brow"><span class="bname">api/photos/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">89%</span></div><div class="brow"><span class="bname">api/labelpool/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">89%</span></div><div class="brow"><span class="bname">api/reaper/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">89%</span></div><div class="brow"><span class="bname">api/embeddings/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">89%</span></div><div class="brow"><span class="bname">api/profiles/image.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">89%</span></div><div class="brow"><span class="bname">api/playlists/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">90%</span></div><div class="brow"><span class="bname">api/faces/detect.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">90%</span></div><div class="brow"><span class="bname">web/dashboard/search_client.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">91%</span></div><div class="brow"><span class="bname">web/dashboard/search_history.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">91%</span></div><div class="brow"><span class="bname">api/videos/watch_payload.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">92%</span></div><div class="brow"><span class="bname">api/auth/sessions.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">92%</span></div><div class="brow"><span class="bname">api/faces/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">██████████████████░░</span></span><span class="bpct">92%</span></div><div class="brow"><span class="bname">api/jobs/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">93%</span></div><div class="brow"><span class="bname">web/dashboard/actors.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">93%</span></div><div class="brow"><span class="bname">web/ui.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">93%</span></div><div class="brow"><span class="bname">web/dashboard/suggest_deep.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">93%</span></div><div class="brow"><span class="bname">api/activity/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">93%</span></div><div class="brow"><span class="bname">api/videos/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">94%</span></div><div class="brow"><span class="bname">api/search/signals.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">94%</span></div><div class="brow"><span class="bname">api/search/queryparse.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">94%</span></div><div class="brow"><span class="bname">api/auth/recovery.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">94%</span></div><div class="brow"><span class="bname">api/videos/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">94%</span></div><div class="brow"><span class="bname">api/dedupe/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">94%</span></div><div class="brow"><span class="bname">api/settings/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">94%</span></div><div class="brow"><span class="bname">api/labelpool/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">94%</span></div><div class="brow"><span class="bname">api/jobs/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">95%</span></div><div class="brow"><span class="bname">api/home/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">95%</span></div><div class="brow"><span class="bname">api/settings/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">95%</span></div><div class="brow"><span class="bname">api/search/execute.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">95%</span></div><div class="brow"><span class="bname">api/autotag/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">95%</span></div><div class="brow"><span class="bname">api/tags/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">95%</span></div><div class="brow"><span class="bname">api/labels/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">95%</span></div><div class="brow"><span class="bname">api/activity/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">96%</span></div><div class="brow"><span class="bname">web/dashboard/profile.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">96%</span></div><div class="brow"><span class="bname">web/dashboard/api_client.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">97%</span></div><div class="brow"><span class="bname">web/dashboard/taxonomy.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">97%</span></div><div class="brow"><span class="bname">api/search/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">97%</span></div><div class="brow"><span class="bname">api/actors/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">97%</span></div><div class="brow"><span class="bname">api/profiles/images.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">███████████████████░</span></span><span class="bpct">97%</span></div><div class="brow"><span class="bname">api/reaper/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">98%</span></div><div class="brow"><span class="bname">api/actors/store.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">98%</span></div><div class="brow"><span class="bname">api/photos/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">98%</span></div><div class="brow"><span class="bname">api/library/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div><div class="brow"><span class="bname">api/main.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div><div class="brow"><span class="bname">web/dashboard/avatar.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div><div class="brow"><span class="bname">api/search/suggest.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div><div class="brow"><span class="bname">api/config.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div><div class="brow"><span class="bname">api/dedupe/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div><div class="brow"><span class="bname">api/identity.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div><div class="brow"><span class="bname">api/labels/router.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div><div class="brow"><span class="bname">api/s3.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div><div class="brow"><span class="bname">web/dashboard/identity.py</span><span class="bbar"><span style="color:oklch(0.7 0.15 148);">████████████████████</span></span><span class="bpct">100%</span></div></div>
+</main>
+<footer class="wrap">Generated from a real coverage.py run on 2026-08-27. Per-module statement counts appear in the findings above; the breakdown carries coverage only. &nbsp;<a href="/blog/">&larr; more writing</a></footer>
+<script>
+(function(){var r=document.documentElement,b=document.getElementById('themeToggle'),s=null;
+try{s=localStorage.getItem('theme');}catch(e){}
+if(s)r.setAttribute('data-theme',s);
+else if(window.matchMedia&&!window.matchMedia('(prefers-color-scheme: dark)').matches)r.setAttribute('data-theme','light');
+function sync(){if(b)b.textContent='theme: '+(r.getAttribute('data-theme')||'dark');}sync();
+if(b)b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';
+r.setAttribute('data-theme',n);try{localStorage.setItem('theme',n);}catch(e){}sync();});})();
+</script>
+</body>
+</html>
